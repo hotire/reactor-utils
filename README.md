@@ -27,7 +27,7 @@
       .doOnError(error -> {...})
   }   
 ~~~
-: All values of ServerRequest(queryParams, pathVariables) into Mono<ValueObject>
+: All values of ServerRequest(queryParams, pathVariables) into Mono&#60;ValueObject&#62;
 
 
 ## MonoBackPressureSubscriber
