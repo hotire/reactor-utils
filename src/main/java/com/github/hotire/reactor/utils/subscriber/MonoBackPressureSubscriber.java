@@ -1,4 +1,4 @@
-package com.github.hotire.reactor.utils;
+package com.github.hotire.reactor.utils.subscriber;
 
 import java.util.function.Consumer;
 import org.reactivestreams.Subscription;
