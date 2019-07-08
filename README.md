@@ -7,6 +7,27 @@
 ## BindingUtils
 
 
+### bind
+
+```
+ public Mono<ServerResponse> handle(ServerRequest request) {
+   Data data = bind(request, Data.class)
+   ....
+ }   
+```
+: All values of ServerRequest(queryParams, pathVariables) into ValueObject
+
+
+### bindToMono
+~~~
+  public Mono<ServerResponse> handle(ServerRequest request) {
+    return bindToMono(request, Data.class)
+      .filter(data -> {...})
+      .map(data -> {...})
+      .doOnError(error -> {...})
+  }   
+~~~
+: All values of ServerRequest(queryParams, pathVariables) into Mono<ValueObject>
 
 
 ## MonoBackPressureSubscriber
