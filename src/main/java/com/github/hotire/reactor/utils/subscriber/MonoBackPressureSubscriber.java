@@ -8,9 +8,13 @@ import reactor.core.publisher.Mono;
 public class MonoBackPressureSubscriber<T> extends BaseSubscriber<Mono<T>> {
 
   private Integer initRequest;
+
   private Integer rateRequest;
+
   private Consumer<T> consumer;
+
   private Consumer<? super Throwable> errorConsumer;
+
   private Runnable completeConsumer;
 
   private MonoBackPressureSubscriber(Integer initRequest, Integer rateRequest,

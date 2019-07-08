@@ -7,7 +7,9 @@ import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.validation.Errors;
 
 public class BindingResultException extends ValidationException {
+
   private Errors errors;
+
   public BindingResultException(Errors errors) {
     super(errors.getAllErrors()
       .stream()
