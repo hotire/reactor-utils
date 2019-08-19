@@ -1,5 +1,6 @@
 package com.github.hotire.reactor.utils.bind;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
@@ -8,7 +9,6 @@ import java.time.Year;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -40,10 +40,10 @@ public class BindingUtilsTest {
 
     // Then
     StepVerifier.create(dataMono).consumeNextWith(data -> {
-      Assertions.assertThat(data.getName()).isEqualTo("hello");
-      Assertions.assertThat(data.getDate()).isEqualTo(LocalDate.of(2019,1,1));
-      Assertions.assertThat(data.getYear()).isEqualTo(Year.of(2019));
-      Assertions.assertThat(data.getMonth()).isEqualTo(Month.of(1));
+      assertThat(data.getName()).isEqualTo("hello");
+      assertThat(data.getDate()).isEqualTo(LocalDate.of(2019,1,1));
+      assertThat(data.getYear()).isEqualTo(Year.of(2019));
+      assertThat(data.getMonth()).isEqualTo(Month.of(1));
     }).verifyComplete();
   }
 
@@ -63,10 +63,10 @@ public class BindingUtilsTest {
 
     // Then
     StepVerifier.create(dataMono).consumeNextWith(data -> {
-      Assertions.assertThat(data.getName()).isEqualTo("hello");
-      Assertions.assertThat(data.getDate()).isEqualTo(LocalDate.of(2019,1,2));
-      Assertions.assertThat(data.getYear()).isEqualTo(Year.of(2018));
-      Assertions.assertThat(data.getMonth()).isEqualTo(Month.of(1));
+      assertThat(data.getName()).isEqualTo("hello");
+      assertThat(data.getDate()).isEqualTo(LocalDate.of(2019,1,2));
+      assertThat(data.getYear()).isEqualTo(Year.of(2018));
+      assertThat(data.getMonth()).isEqualTo(Month.of(1));
     }).verifyComplete();
   }
 
@@ -83,7 +83,7 @@ public class BindingUtilsTest {
     String result = BindingUtils.bindOne(request, String.class);
 
     // Then
-    Assertions.assertThat(result).isEqualTo("hello");
+    assertThat(result).isEqualTo("hello");
   }
 
   @Test
@@ -98,7 +98,20 @@ public class BindingUtilsTest {
     String result = BindingUtils.bindOne(request, String.class);
 
     // Then
-    Assertions.assertThat(result).isEqualTo("hello");
+    assertThat(result).isEqualTo("hello");
+  }
+
+  @Test
+  public void queryParam_boolean() {
+    Map<String, String> map = new HashMap<>();
+    map.put("test", "true");
+
+    // When
+    when(request.pathVariables()).thenReturn(map);
+    when(request.queryParams()).thenReturn(new LinkedMultiValueMap<>());
+    Boolean result = BindingUtils.bindOne(request, Boolean.class);
+
+    assertThat(result).isEqualTo(true);
   }
 
   public static class Data {

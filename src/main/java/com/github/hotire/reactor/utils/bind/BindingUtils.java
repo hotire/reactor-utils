@@ -2,9 +2,11 @@ package com.github.hotire.reactor.utils.bind;
 
 
 
-import com.github.hotire.reactor.utils.bind.converter.LocalDateConverter;
-import com.github.hotire.reactor.utils.bind.converter.MonthConverter;
-import com.github.hotire.reactor.utils.bind.converter.YearConverter;
+import com.github.hotire.reactor.utils.bind.converter.spring.BooleanConverter;
+import com.github.hotire.reactor.utils.bind.converter.beanutils.LocalDateConverter;
+import com.github.hotire.reactor.utils.bind.converter.spring.LongConverter;
+import com.github.hotire.reactor.utils.bind.converter.beanutils.MonthConverter;
+import com.github.hotire.reactor.utils.bind.converter.beanutils.YearConverter;
 import com.github.hotire.reactor.utils.bind.validation.BindingResultException;
 import com.github.hotire.reactor.utils.bind.validation.ConstraintValidator;
 import java.time.LocalDate;
@@ -37,9 +39,12 @@ public class BindingUtils {
 
     LocalValidatorFactoryBean localValidatorFactoryBean = new LocalValidatorFactoryBean();
     localValidatorFactoryBean.afterPropertiesSet();
-
     VALIDATOR = new ConstraintValidator(localValidatorFactoryBean);
-    CONVERTER = new GenericConversionService();
+
+    GenericConversionService conversionService = new GenericConversionService();
+    conversionService.addConverter(new LongConverter());
+    conversionService.addConverter(new BooleanConverter());
+    CONVERTER = conversionService;
   }
 
   public static <T> T bind(ServerRequest request, Class<T> type) {
