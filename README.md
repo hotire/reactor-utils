@@ -29,15 +29,14 @@ bind to instance of class<T> type
 
 **Custom Convert**
 
-1.commons-beanutils
+- commons-beanutils
+  - LocalDate.class
+  - Year.class
+  - Month.class
 
-- LocalDate
-- Year
-- Month
-
-2.springframework-core-convert-based
-- Long
-- Boolean
+- springframework-core-convert-based
+  - Long.class
+  - Boolean.class
 
 
 ### bind
