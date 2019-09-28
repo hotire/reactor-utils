@@ -11,7 +11,7 @@
 <dependency>
     <groupId>com.github.hotire</groupId>
     <artifactId>reactor-utils</artifactId>
-    <version>0.0.1</version>
+    <version>0.0.2</version>
 </dependency>
 ```
 
@@ -30,6 +30,7 @@ bind to instance of class<T> type
 **Custom Convert**
 
 - commons-beanutils
+  - LocalDateTime.class
   - LocalDate.class
   - Year.class
   - Month.class
@@ -63,10 +64,25 @@ bind to instance of class<T> type
 
 ### bindOne
 ```
+  public Mono<ServerResponse> handle(ServerRequest request) {
+    final String userId = bindOne(request, String.class).orElse(DEFAULT);
+    ....
+    ....
+  }  
 ```
+: One value of ServerRequest(queryParam, pathVariable) into Optional&#60;ValueObject&#62;
+
 ### bindOneToMono
 ```
+  public Mono<ServerResponse> handle(ServerRequest request) {
+    return bindOneToMono(request, String.class)
+      .map(userId -> userId.orElseThrow() -> {...})         
+      .filter(userId -> {...})
+      .map(userId -> {...})
+      .doOnError(userId -> {...})
+  }   
 ```
+: One value of ServerRequest(queryParam, pathVariable) into Mono&#60;Optional&#60;ValueObject&#62;&#62;
 
 ## MonoBackPressureSubscriber
 
