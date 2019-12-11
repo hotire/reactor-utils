@@ -2,7 +2,7 @@
 
 ![toaster](/doc/toaster.png)
 
-> This is not bread-utils, This is toaster
+> This is not bread-utils, just the toaster
 
 ## Installation
 
