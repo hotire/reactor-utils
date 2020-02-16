@@ -8,10 +8,15 @@
 
 ### Maven 
 ```
+<repository>
+  <id>hotire</id>
+  <url>http://dl.bintray.com/hotire/utils</url>
+</repository>
+
 <dependency>
     <groupId>com.github.hotire</groupId>
     <artifactId>reactor-utils</artifactId>
-    <version>0.0.2</version>
+    <version>0.0.3</version>
 </dependency>
 ```
 
@@ -94,3 +99,10 @@ MonoBackPressureSubscriber request to publisher and consume Mono then pull Mono 
 blog : https://blog.naver.com/gngh0101
 
 reference : https://projectreactor.io/docs/core/release/reference/
+
+
+## MDC
+
+Thread-local based MDC is difficult when you switch thread in Webflux
+
+ 
