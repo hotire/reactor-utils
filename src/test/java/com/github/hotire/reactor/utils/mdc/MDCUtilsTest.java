@@ -45,7 +45,18 @@ class MDCUtilsTest {
 
   @Test
   void clear() {
+    // when
     MDCUtils.clear();
+
+    // no assert
+  }
+
+  @Test
+  void remove() {
+    // when
+    MDCUtils.remove("key");
+
+    // no assert
   }
 
 }
