@@ -26,4 +26,12 @@ class MDCUtilsTest {
     // then
     assertThat(instance).isNotNull();
   }
+
+  @Test
+  void get() {
+    // when
+    MDCUtils.get("key");
+
+    // no assert
+  }
 }
