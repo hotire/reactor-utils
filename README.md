@@ -103,6 +103,19 @@ reference : https://projectreactor.io/docs/core/release/reference/
 
 ## MDC
 
-Thread-local based MDC is difficult when you switch thread in Webflux
+Thread-local based MDC is difficult when you switch thread in Webflux.
 
- 
+If you want to maintain MDC, similarly the thread, MDC must also switch.
+
+
+### How to use 
+
+```java
+class Configuration {
+  static {
+    Schedulers.addExecutorServiceDecorator(MDCScheduledExecutorServiceDecorator.class.getName(),
+          (scheduler, scheduledExecutorService) -> new MDCScheduledExecutorServiceDecorator(scheduledExecutorService));
+  }
+}
+``` 
+
