@@ -7,7 +7,7 @@
 ## Installation
 
 ### Maven 
-```
+```xml
 <repository>
   <id>hotire</id>
   <url>http://dl.bintray.com/hotire/utils</url>
@@ -47,7 +47,7 @@ bind to instance of class<T> type
 
 ### bind
 
-```
+```java
  public Mono<ServerResponse> handle(ServerRequest request) {
    Data data = bind(request, Data.class)
    ....
@@ -57,7 +57,7 @@ bind to instance of class<T> type
 
 
 ### bindToMono
-~~~
+~~~java
   public Mono<ServerResponse> handle(ServerRequest request) {
     return bindToMono(request, Data.class)
       .filter(data -> {...})
@@ -68,7 +68,7 @@ bind to instance of class<T> type
 : All values of ServerRequest(queryParams, pathVariables) into Mono&#60;ValueObject&#62;
 
 ### bindOne
-```
+```java
   public Mono<ServerResponse> handle(ServerRequest request) {
     final String userId = bindOne(request, String.class).orElse(DEFAULT);
     ....
@@ -78,7 +78,7 @@ bind to instance of class<T> type
 : One value of ServerRequest(queryParam, pathVariable) into Optional&#60;ValueObject&#62;
 
 ### bindOneToMono
-```
+```java
   public Mono<ServerResponse> handle(ServerRequest request) {
     return bindOneToMono(request, String.class)
       .map(userId -> userId.orElseThrow() -> {...})         
