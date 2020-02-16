@@ -43,4 +43,9 @@ class MDCUtilsTest {
     // no assert
   }
 
+  @Test
+  void clear() {
+    MDCUtils.clear();
+  }
+
 }
