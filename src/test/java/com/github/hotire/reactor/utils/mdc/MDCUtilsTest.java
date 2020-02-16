@@ -34,4 +34,13 @@ class MDCUtilsTest {
 
     // no assert
   }
+
+  @Test
+  void put() {
+    // when
+    MDCUtils.put("key", "value");
+
+    // no assert
+  }
+
 }
