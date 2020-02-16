@@ -5,11 +5,13 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 
 class MDCUtilsTest {
 
+  @DisplayName("Verify private constructor")
   @Test
   void create()
     // given
@@ -27,6 +29,7 @@ class MDCUtilsTest {
     assertThat(instance).isNotNull();
   }
 
+  @DisplayName("Verify invoke get")
   @Test
   void get() {
     // when
@@ -35,6 +38,7 @@ class MDCUtilsTest {
     // no assert
   }
 
+  @DisplayName("Verify invoke put")
   @Test
   void put() {
     // when
@@ -43,6 +47,7 @@ class MDCUtilsTest {
     // no assert
   }
 
+  @DisplayName("Verify invoke clear")
   @Test
   void clear() {
     // when
@@ -51,6 +56,7 @@ class MDCUtilsTest {
     // no assert
   }
 
+  @DisplayName("Verify invoke remove")
   @Test
   void remove() {
     // when
