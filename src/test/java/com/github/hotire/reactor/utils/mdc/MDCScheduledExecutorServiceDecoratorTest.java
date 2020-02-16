@@ -42,7 +42,7 @@ class MDCScheduledExecutorServiceDecoratorTest {
     final MDCScheduledExecutorServiceDecorator service = new MDCScheduledExecutorServiceDecorator(mock(ScheduledExecutorService.class));
 
     // when
-    Collection<? extends Callable<String>> result = service.wrapCallableCollection(Lists.newArrayList(() -> "s"));
+    final Collection<? extends Callable<String>> result = service.wrapCallableCollection(Lists.newArrayList(() -> "s"));
 
     // then
     assertThat(result.size()).isEqualTo(1);
