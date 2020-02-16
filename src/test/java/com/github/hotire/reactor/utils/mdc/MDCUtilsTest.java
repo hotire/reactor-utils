@@ -9,6 +9,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 
+@DisplayName("Verify MDCUtils of static class")
 class MDCUtilsTest {
 
   @DisplayName("Verify private constructor")
