@@ -3,8 +3,10 @@ package com.github.hotire.reactor.utils.mdc;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
+import java.util.Collection;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ScheduledExecutorService;
+import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;
 
 
@@ -24,7 +26,7 @@ class MDCScheduledExecutorServiceDecoratorTest {
 
   @Test
   void decorateCallable() {
-    // given
+   // given
     final MDCScheduledExecutorServiceDecorator service = new MDCScheduledExecutorServiceDecorator(mock(ScheduledExecutorService.class));
 
     // when
@@ -32,6 +34,19 @@ class MDCScheduledExecutorServiceDecoratorTest {
 
     // then
     assertThat(result).isInstanceOf(MDCCallable.class);
+  }
+
+  @Test
+  void wrapCallableCollection() {
+    // given
+    final MDCScheduledExecutorServiceDecorator service = new MDCScheduledExecutorServiceDecorator(mock(ScheduledExecutorService.class));
+
+    // when
+    Collection<? extends Callable<String>> result = service.wrapCallableCollection(Lists.newArrayList(() -> "s"));
+
+    // then
+    assertThat(result.size()).isEqualTo(1);
+    result.forEach(callable -> assertThat(callable).isInstanceOf(MDCCallable.class));
   }
 
 }
