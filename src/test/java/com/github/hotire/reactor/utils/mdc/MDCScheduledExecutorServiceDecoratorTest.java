@@ -22,4 +22,16 @@ class MDCScheduledExecutorServiceDecoratorTest {
     assertThat(result).isInstanceOf(MDCRunnable.class);
   }
 
+  @Test
+  void decorateCallable() {
+    // given
+    final MDCScheduledExecutorServiceDecorator service = new MDCScheduledExecutorServiceDecorator(mock(ScheduledExecutorService.class));
+
+    // when
+    final Callable<String> result = service.decorateCallable(() -> "s");
+
+    // then
+    assertThat(result).isInstanceOf(MDCCallable.class);
+  }
+
 }
