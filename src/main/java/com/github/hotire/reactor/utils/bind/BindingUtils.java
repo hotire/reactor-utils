@@ -57,7 +57,7 @@ public class BindingUtils {
 
   public static <T> T bind(ServerRequest request, Class<T> type, boolean isValidation) {
     try {
-      T instance = type.getConstructor().newInstance();
+      final T instance = type.getConstructor().newInstance();
 
       final Map<String, String> queryParams = new HashMap<>();
       request.queryParams().forEach((s, strings) -> queryParams.put(s, strings.get(0)));
@@ -87,7 +87,7 @@ public class BindingUtils {
     if (!CONVERTER.canConvert(String.class, type)) {
       throw new IllegalArgumentException("Can not convert type : " + type);
     }
-    AtomicReference<T> atomicReference = new AtomicReference<>();
+    final AtomicReference<T> atomicReference = new AtomicReference<>();
     request.queryParams().forEach((key, values) -> atomicReference.set(CONVERTER.convert(values.get(0), type)));
     request.pathVariables().forEach((key, value) -> atomicReference.set(CONVERTER.convert(value, type)));
 
