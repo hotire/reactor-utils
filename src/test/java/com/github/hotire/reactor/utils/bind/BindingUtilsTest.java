@@ -80,7 +80,7 @@ public class BindingUtilsTest {
     // When
     when(request.pathVariables()).thenReturn(new HashMap<>());
     when(request.queryParams()).thenReturn(map);
-    String result = BindingUtils.bindOne(request, String.class);
+    String result = BindingUtils.bindOne(request, String.class).orElse(null);
 
     // Then
     assertThat(result).isEqualTo("hello");
@@ -95,7 +95,7 @@ public class BindingUtilsTest {
     // When
     when(request.pathVariables()).thenReturn(map);
     when(request.queryParams()).thenReturn(new LinkedMultiValueMap<>());
-    String result = BindingUtils.bindOne(request, String.class);
+    String result = BindingUtils.bindOne(request, String.class).orElse(null);
 
     // Then
     assertThat(result).isEqualTo("hello");
@@ -109,7 +109,7 @@ public class BindingUtilsTest {
     // When
     when(request.pathVariables()).thenReturn(map);
     when(request.queryParams()).thenReturn(new LinkedMultiValueMap<>());
-    Boolean result = BindingUtils.bindOne(request, Boolean.class);
+    Boolean result = BindingUtils.bindOne(request, Boolean.class).orElse(null);
 
     assertThat(result).isEqualTo(true);
   }
