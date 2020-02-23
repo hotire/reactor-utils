@@ -1,6 +1,7 @@
 package com.github.hotire.reactor.utils.bind;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
@@ -19,16 +20,14 @@ import org.springframework.web.reactive.function.server.ServerRequest;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
-@RunWith(MockitoJUnitRunner.class)
-public class BindingUtilsTest {
 
-  @Mock
-  private ServerRequest request;
+public class BindingUtilsTest {
 
   @Test
   public void queryParams() {
     // Given
-    MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
+    final ServerRequest request = mock(ServerRequest.class);
+    final MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
     map.put("name", Collections.singletonList("hello"));
     map.put("date", Collections.singletonList("2019-01-01"));
     map.put("year", Collections.singletonList("2019"));
@@ -36,7 +35,7 @@ public class BindingUtilsTest {
 
     // When
     when(request.queryParams()).thenReturn(map);
-    Mono<Data> dataMono = BindingUtils.bindToMono(request, Data.class).log("data");
+    final Mono<Data> dataMono = BindingUtils.bindToMono(request, Data.class).log("data");
 
     // Then
     StepVerifier.create(dataMono).consumeNextWith(data -> {
@@ -50,7 +49,8 @@ public class BindingUtilsTest {
   @Test
   public void pathVariables() {
     // Given
-    Map<String, String> map = new HashMap<>();
+    final ServerRequest request = mock(ServerRequest.class);
+    final Map<String, String> map = new HashMap<>();
     map.put("name", "hello");
     map.put("date", "2019-01-02");
     map.put("year", "2018");
@@ -73,14 +73,15 @@ public class BindingUtilsTest {
   @Test
   public void pathVariable() throws InterruptedException {
     // Given
-    MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
+    final ServerRequest request = mock(ServerRequest.class);
+    final MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
     map.put("name", Collections.singletonList("hello"));
 
 
     // When
     when(request.pathVariables()).thenReturn(new HashMap<>());
     when(request.queryParams()).thenReturn(map);
-    String result = BindingUtils.bindOne(request, String.class).orElse(null);
+    final String result = BindingUtils.bindOne(request, String.class).orElse(null);
 
     // Then
     assertThat(result).isEqualTo("hello");
@@ -89,13 +90,14 @@ public class BindingUtilsTest {
   @Test
   public void queryParam() throws InterruptedException {
     // Given
-    Map<String, String> map = new HashMap<>();
+    final ServerRequest request = mock(ServerRequest.class);
+    final Map<String, String> map = new HashMap<>();
     map.put("name", "hello");
 
     // When
     when(request.pathVariables()).thenReturn(map);
     when(request.queryParams()).thenReturn(new LinkedMultiValueMap<>());
-    String result = BindingUtils.bindOne(request, String.class).orElse(null);
+    final String result = BindingUtils.bindOne(request, String.class).orElse(null);
 
     // Then
     assertThat(result).isEqualTo("hello");
@@ -103,14 +105,17 @@ public class BindingUtilsTest {
 
   @Test
   public void queryParam_boolean() {
-    Map<String, String> map = new HashMap<>();
+    // Given
+    final ServerRequest request = mock(ServerRequest.class);
+    final Map<String, String> map = new HashMap<>();
     map.put("test", "true");
 
     // When
     when(request.pathVariables()).thenReturn(map);
     when(request.queryParams()).thenReturn(new LinkedMultiValueMap<>());
-    Boolean result = BindingUtils.bindOne(request, Boolean.class).orElse(null);
+    final Boolean result = BindingUtils.bindOne(request, Boolean.class).orElse(null);
 
+    // Then
     assertThat(result).isEqualTo(true);
   }
 

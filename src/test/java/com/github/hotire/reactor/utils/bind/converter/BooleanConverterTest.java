@@ -13,7 +13,7 @@ public class BooleanConverterTest {
     final BooleanConverter converter = new BooleanConverter();
 
     // When
-    Boolean result = converter.convert("true");
+    final Boolean result = converter.convert("true");
 
     // Then
     assertThat(result).isEqualTo(true);

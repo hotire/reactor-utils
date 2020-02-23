@@ -13,7 +13,7 @@ public class LongConverterTest {
     final LongConverter converter = new LongConverter();
 
     // When
-    Long result = converter.convert("1");
+    final Long result = converter.convert("1");
 
     // Then
     assertThat(result).isEqualTo(1L);
