@@ -1,20 +1,14 @@
 package com.github.hotire.reactor.utils.bind;
 
 
-
-import com.github.hotire.reactor.utils.bind.converter.spring.BooleanConverter;
 import com.github.hotire.reactor.utils.bind.converter.beanutils.LocalDateConverter;
-import com.github.hotire.reactor.utils.bind.converter.spring.LongConverter;
+import com.github.hotire.reactor.utils.bind.converter.beanutils.LocalDateTimeConverter;
 import com.github.hotire.reactor.utils.bind.converter.beanutils.MonthConverter;
 import com.github.hotire.reactor.utils.bind.converter.beanutils.YearConverter;
+import com.github.hotire.reactor.utils.bind.converter.spring.BooleanConverter;
+import com.github.hotire.reactor.utils.bind.converter.spring.LongConverter;
 import com.github.hotire.reactor.utils.bind.validation.BindingResultException;
 import com.github.hotire.reactor.utils.bind.validation.ConstraintValidator;
-import java.time.LocalDate;
-import java.time.Month;
-import java.time.Year;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicReference;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.ConvertUtils;
 import org.springframework.core.convert.ConversionService;
@@ -23,6 +17,15 @@ import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import reactor.core.publisher.Mono;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.Month;
+import java.time.Year;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class BindingUtils {
 
@@ -34,6 +37,7 @@ public class BindingUtils {
 
   static {
     ConvertUtils.register(new LocalDateConverter(), LocalDate.class);
+    ConvertUtils.register(new LocalDateTimeConverter(), LocalDateTime.class);
     ConvertUtils.register(new MonthConverter(), Month.class);
     ConvertUtils.register(new YearConverter(), Year.class);
 
@@ -66,7 +70,7 @@ public class BindingUtils {
       }
 
       return instance;
-    } catch (Throwable e) {
+    } catch (Exception e) {
       throw new RuntimeException(e);
     }
   }
@@ -76,11 +80,11 @@ public class BindingUtils {
   }
 
   public static <T> Mono<T> bindToMono(ServerRequest request, Class<T> type, boolean isValidation) {
-    return Mono.create(monoSink -> monoSink.success(bind(request, type)));
+    return Mono.create(monoSink -> monoSink.success(bind(request, type, isValidation)));
   }
 
 
-  public static <T> T bindOne(ServerRequest request, Class<T> type) {
+  public static <T> Optional<T> bindOne(ServerRequest request, Class<T> type) {
     if (!CONVERTER.canConvert(String.class, type)) {
       throw new IllegalArgumentException("Can not convert type : " + type);
     }
@@ -88,11 +92,11 @@ public class BindingUtils {
     request.queryParams().forEach((key, values) -> atomicReference.set(CONVERTER.convert(values.get(0), type)));
     request.pathVariables().forEach((key, value) -> atomicReference.set(CONVERTER.convert(value, type)));
 
-    return atomicReference.get();
+    return Optional.ofNullable(atomicReference.get());
   }
 
   public static <T> Mono<T> bindOneToMono(ServerRequest request, Class<T> type) {
-    return Mono.create(monoSink -> monoSink.success(bindOne(request, type)));
+    return Mono.create(monoSink -> monoSink.success(bindOne(request, type).get()));
   }
 
   public static BeanPropertyBindingResult validate(Object target, boolean isThrowable) {
