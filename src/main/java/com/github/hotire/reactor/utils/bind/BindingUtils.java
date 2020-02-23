@@ -29,9 +29,9 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class BindingUtils {
 
-  private static ConstraintValidator VALIDATOR;
+  private static final ConstraintValidator VALIDATOR;
 
-  private static ConversionService CONVERTER;
+  private static final ConversionService CONVERTER;
 
   private BindingUtils() {}
 
