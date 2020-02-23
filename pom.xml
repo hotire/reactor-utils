@@ -11,7 +11,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.github.hotire</groupId>
   <artifactId>reactor-utils</artifactId>
-  <version>0.0.4</version>
+  <version>0.0.5</version>
   <name>reactor-utils</name>
   <description>reactor-utils</description>
   <url>https://github.com/hotire/reactor-utils</url>
