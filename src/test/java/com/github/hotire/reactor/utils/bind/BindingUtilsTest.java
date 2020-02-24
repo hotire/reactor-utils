@@ -1,6 +1,6 @@
 package com.github.hotire.reactor.utils.bind;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.reactive.function.server.ServerRequest;
@@ -19,10 +19,10 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 
-public class BindingUtilsTest {
+class BindingUtilsTest {
 
   @Test
-  public void queryParams() {
+  void queryParams() {
     // Given
     final ServerRequest request = mock(ServerRequest.class);
     final MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
@@ -45,7 +45,7 @@ public class BindingUtilsTest {
   }
 
   @Test
-  public void pathVariables() {
+  void pathVariables() {
     // Given
     final ServerRequest request = mock(ServerRequest.class);
     final Map<String, String> map = new HashMap<>();
@@ -69,7 +69,7 @@ public class BindingUtilsTest {
   }
 
   @Test
-  public void pathVariable() throws InterruptedException {
+  void pathVariable() throws InterruptedException {
     // Given
     final ServerRequest request = mock(ServerRequest.class);
     final MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
@@ -86,7 +86,7 @@ public class BindingUtilsTest {
   }
 
   @Test
-  public void queryParam() throws InterruptedException {
+  void queryParam() throws InterruptedException {
     // Given
     final ServerRequest request = mock(ServerRequest.class);
     final Map<String, String> map = new HashMap<>();
@@ -102,7 +102,7 @@ public class BindingUtilsTest {
   }
 
   @Test
-  public void queryParam_boolean() {
+  void queryParam_boolean() {
     // Given
     final ServerRequest request = mock(ServerRequest.class);
     final Map<String, String> map = new HashMap<>();

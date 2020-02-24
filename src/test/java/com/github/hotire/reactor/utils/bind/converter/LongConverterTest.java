@@ -1,14 +1,14 @@
 package com.github.hotire.reactor.utils.bind.converter;
 
+import com.github.hotire.reactor.utils.bind.converter.spring.LongConverter;
+import org.junit.jupiter.api.Test;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.github.hotire.reactor.utils.bind.converter.spring.LongConverter;
-import org.junit.Test;
-
-public class LongConverterTest {
+class LongConverterTest {
 
   @Test
-  public void convert() {
+  void convert() {
     // Given
     final LongConverter converter = new LongConverter();
 
