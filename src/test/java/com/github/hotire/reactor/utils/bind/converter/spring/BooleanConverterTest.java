@@ -1,4 +1,4 @@
-package com.github.hotire.reactor.utils.bind.converter;
+package com.github.hotire.reactor.utils.bind.converter.spring;
 
 import com.github.hotire.reactor.utils.bind.converter.spring.BooleanConverter;
 import org.junit.jupiter.api.Test;
