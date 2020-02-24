@@ -1,16 +1,17 @@
 package com.github.hotire.reactor.utils.bind.validation;
 
-import static java.util.stream.Collectors.joining;
-
-import javax.validation.ValidationException;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.validation.Errors;
+
+import javax.validation.ValidationException;
+
+import static java.util.stream.Collectors.joining;
 
 public class BindingResultException extends ValidationException {
 
   private Errors errors;
 
-  public BindingResultException(Errors errors) {
+  public BindingResultException(final Errors errors) {
     super(errors.getAllErrors()
       .stream()
       .map(DefaultMessageSourceResolvable::getDefaultMessage)
