@@ -17,9 +17,9 @@ public class MonoBackPressureSubscriber<T> extends BaseSubscriber<Mono<T>> {
 
   private Runnable completeConsumer;
 
-  private MonoBackPressureSubscriber(Integer initRequest, Integer rateRequest,
-    Consumer<T> consumer, Consumer<? super Throwable> errorConsumer,
-    Runnable completeConsumer) {
+  MonoBackPressureSubscriber(Integer initRequest, Integer rateRequest,
+          Consumer<T> consumer, Consumer<? super Throwable> errorConsumer,
+          Runnable completeConsumer) {
     this.initRequest = initRequest;
     this.rateRequest = rateRequest;
     this.consumer = consumer;
