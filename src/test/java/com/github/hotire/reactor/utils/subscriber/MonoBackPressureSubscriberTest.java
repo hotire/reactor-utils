@@ -2,6 +2,7 @@ package com.github.hotire.reactor.utils.subscriber;
 
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
+import org.reactivestreams.Subscription;
 import reactor.core.publisher.Mono;
 
 import java.util.function.Consumer;
@@ -25,5 +26,29 @@ class MonoBackPressureSubscriberTest {
         // then
         verify(consumer, times(1)).accept(argumentCaptor.capture());
         assertThat(argumentCaptor.getValue()).isEqualTo(expected);
+    }
+
+    @Test
+    void hookOnSubscribe() {
+        // given
+        final MonoBackPressureSubscriber<String> subscriber = MonoBackPressureSubscriber.of(1, 1,  mock(Consumer.class));
+
+        // when
+        subscriber.hookOnSubscribe(mock(Subscription.class));
+
+        // no assert
+    }
+
+    @Test
+    void create() {
+        // given
+        final Consumer<?> consumer = mock(Consumer.class);
+        final Consumer<? super Throwable> doOnError = mock(Consumer.class);
+        final Runnable doOncomplete = mock(Runnable.class);
+
+        // when  then
+        assertThat(MonoBackPressureSubscriber.of(1, 1, consumer)).isNotNull();
+        assertThat(MonoBackPressureSubscriber.of(1, 1, consumer, doOnError)).isNotNull();
+        assertThat(MonoBackPressureSubscriber.of(1, 1, consumer, doOnError, doOncomplete)).isNotNull();
     }
 }
