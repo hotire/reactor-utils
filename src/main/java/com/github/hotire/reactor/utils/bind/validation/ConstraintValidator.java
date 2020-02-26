@@ -27,7 +27,7 @@ public class ConstraintValidator extends SpringValidatorAdapter {
     Arrays.stream(target.getClass().getDeclaredFields())
       .filter(field -> field.isAnnotationPresent(Constraint.class))
       .forEach(field -> {
-        Constraint constraint = field.getAnnotation(Constraint.class);
+        final Constraint constraint = field.getAnnotation(Constraint.class);
         field.setAccessible(true);
         try {
           final BooleanSupplier predicate = (BooleanSupplier) field.get(target);

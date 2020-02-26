@@ -9,7 +9,7 @@ import static java.util.stream.Collectors.joining;
 
 public class BindingResultException extends ValidationException {
 
-  private Errors errors;
+  private final Errors errors;
 
   public BindingResultException(final Errors errors) {
     super(errors.getAllErrors()
