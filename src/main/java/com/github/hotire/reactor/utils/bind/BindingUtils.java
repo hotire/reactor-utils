@@ -41,14 +41,15 @@ public class BindingUtils {
     ConvertUtils.register(new MonthConverter(), Month.class);
     ConvertUtils.register(new YearConverter(), Year.class);
 
-    LocalValidatorFactoryBean localValidatorFactoryBean = new LocalValidatorFactoryBean();
-    localValidatorFactoryBean.afterPropertiesSet();
-    VALIDATOR = new ConstraintValidator(localValidatorFactoryBean);
-
-    GenericConversionService conversionService = new GenericConversionService();
+    final GenericConversionService conversionService = new GenericConversionService();
     conversionService.addConverter(new LongConverter());
     conversionService.addConverter(new BooleanConverter());
+
+    final LocalValidatorFactoryBean localValidatorFactoryBean = new LocalValidatorFactoryBean();
+    localValidatorFactoryBean.afterPropertiesSet();
+
     CONVERTER = conversionService;
+    VALIDATOR = new ConstraintValidator(localValidatorFactoryBean);
   }
 
   public static <T> T bind(final ServerRequest request, final Class<T> type) {
@@ -102,7 +103,7 @@ public class BindingUtils {
   }
 
   public static BeanPropertyBindingResult validate(final Object target, final boolean isThrowable) {
-    BeanPropertyBindingResult errors = new BeanPropertyBindingResult(target, target.getClass().getSimpleName());
+    final BeanPropertyBindingResult errors = new BeanPropertyBindingResult(target, target.getClass().getSimpleName());
     VALIDATOR.validate(target, errors);
     if (errors.hasErrors() && isThrowable) {
       throw new BindingResultException(errors);
