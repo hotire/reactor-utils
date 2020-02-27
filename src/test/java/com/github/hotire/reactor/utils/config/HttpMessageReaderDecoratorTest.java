@@ -3,9 +3,12 @@ package com.github.hotire.reactor.utils.config;
 import org.junit.jupiter.api.Test;
 import org.springframework.core.ResolvableType;
 import org.springframework.http.MediaType;
+import org.springframework.http.ReactiveHttpInputMessage;
 import org.springframework.http.codec.HttpMessageReader;
+import reactor.core.publisher.Mono;
 
 import java.util.List;
+import java.util.Map;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.mockito.Mockito.*;
@@ -57,6 +60,17 @@ class HttpMessageReaderDecoratorTest {
 
     @Test
     void readMono() {
+        // given
+        final Mono expected = mock(Mono.class);
+        final HttpMessageReader<?> reader = mock(HttpMessageReader.class);
+        final HttpMessageReaderDecorator<?> decorator = new HttpMessageReaderDecorator<>(reader);
+
+        // when
+        when(reader.readMono(any(), any(), anyMap())).thenReturn(expected);
+        final Mono<?> result = decorator.readMono(mock(ResolvableType.class), mock(ReactiveHttpInputMessage.class), mock(Map.class));
+
+        // then
+        assertThat(result).isEqualTo(expected);
     }
 
     @Test
