@@ -1,15 +1,12 @@
 package com.github.hotire.reactor.utils.config;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.core.ResolvableType;
 import org.springframework.http.MediaType;
-import org.springframework.http.ReactiveHttpInputMessage;
 import org.springframework.http.codec.HttpMessageReader;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
-import java.util.Map;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.mockito.Mockito.*;
@@ -54,7 +51,7 @@ class HttpMessageReaderDecoratorTest {
 
         // when
         when(reader.canRead(any(), any())).thenReturn(expected);
-        final boolean result = decorator.canRead(mock(ResolvableType.class), mock(MediaType.class));
+        final boolean result = decorator.canRead(any(), any());
 
         // then
         assertThat(result).isEqualTo(expected);
@@ -70,7 +67,7 @@ class HttpMessageReaderDecoratorTest {
 
         // when
         when(reader.readMono(any(), any(), anyMap())).thenReturn(expected);
-        final Mono<?> result = decorator.readMono(mock(ResolvableType.class), mock(ReactiveHttpInputMessage.class), mock(Map.class));
+        final Mono<?> result = decorator.readMono(any(), any(), anyMap());
 
         // then
         assertThat(result).isEqualTo(expected);
@@ -86,7 +83,7 @@ class HttpMessageReaderDecoratorTest {
 
         // when
         when(reader.read(any(), any(), anyMap())).thenReturn(expected);
-        final Flux<?> result = decorator.read(mock(ResolvableType.class), mock(ReactiveHttpInputMessage.class), mock(Map.class));
+        final Flux<?> result = decorator.read(any(), any(), anyMap());
 
         // then
         assertThat(result).isEqualTo(expected);
