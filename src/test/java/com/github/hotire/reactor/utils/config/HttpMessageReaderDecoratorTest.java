@@ -5,6 +5,7 @@ import org.springframework.core.ResolvableType;
 import org.springframework.http.MediaType;
 import org.springframework.http.ReactiveHttpInputMessage;
 import org.springframework.http.codec.HttpMessageReader;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
@@ -31,6 +32,7 @@ class HttpMessageReaderDecoratorTest {
     @Test
     void getReadableMediaTypes() {
         // given
+        @SuppressWarnings("unchecked")
         final List<MediaType> mediaTypes = mock(List.class);
         final HttpMessageReader<?> reader = mock(HttpMessageReader.class);
         final HttpMessageReaderDecorator<?> decorator = new HttpMessageReaderDecorator<>(reader);
@@ -58,6 +60,7 @@ class HttpMessageReaderDecoratorTest {
         assertThat(result).isEqualTo(expected);
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     void readMono() {
         // given
@@ -73,7 +76,19 @@ class HttpMessageReaderDecoratorTest {
         assertThat(result).isEqualTo(expected);
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     void read() {
+        // given
+        final Flux expected = mock(Flux.class);
+        final HttpMessageReader<?> reader = mock(HttpMessageReader.class);
+        final HttpMessageReaderDecorator<?> decorator = new HttpMessageReaderDecorator<>(reader);
+
+        // when
+        when(reader.read(any(), any(), anyMap())).thenReturn(expected);
+        final Flux<?> result = decorator.read(mock(ResolvableType.class), mock(ReactiveHttpInputMessage.class), mock(Map.class));
+
+        // then
+        assertThat(result).isEqualTo(expected);
     }
 }
