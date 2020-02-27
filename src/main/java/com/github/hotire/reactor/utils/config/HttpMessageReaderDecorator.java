@@ -34,12 +34,12 @@ public class HttpMessageReaderDecorator<T> implements HttpMessageReader<T> {
     }
 
     @Override
-    public Mono<T> readMono(final ResolvableType resolvableType, final ReactiveHttpInputMessage reactiveHttpInputMessage, final Map<String, Object> map) {
-        return getDelegate().readMono(resolvableType, reactiveHttpInputMessage, map);
+    public Mono<T> readMono(final ResolvableType resolvableType, final ReactiveHttpInputMessage reactiveHttpInputMessage, final Map<String, Object> hints) {
+        return getDelegate().readMono(resolvableType, reactiveHttpInputMessage, hints);
     }
 
     @Override
-    public Flux<T> read(final ResolvableType resolvableType, final ReactiveHttpInputMessage reactiveHttpInputMessage, final Map<String, Object> map) {
-        return getDelegate().read(resolvableType, reactiveHttpInputMessage, map);
+    public Flux<T> read(final ResolvableType resolvableType, final ReactiveHttpInputMessage reactiveHttpInputMessage, final Map<String, Object> hints) {
+        return getDelegate().read(resolvableType, reactiveHttpInputMessage, hints);
     }
 }
