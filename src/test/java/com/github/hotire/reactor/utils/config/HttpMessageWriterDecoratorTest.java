@@ -27,7 +27,18 @@ class HttpMessageWriterDecoratorTest {
 
     @Test
     void getWritableMediaTypes() {
+        // given
+        @SuppressWarnings("unchecked")
+        final List<MediaType> expected = mock(List.class);
+        final HttpMessageWriter<?> reader = mock(HttpMessageWriter.class);
+        final HttpMessageWriterDecorator<?> decorator = new HttpMessageWriterDecorator<>(reader);
 
+        // when
+        when(reader.getWritableMediaTypes()).thenReturn(expected);
+        final List<MediaType> result = decorator.getWritableMediaTypes();
+
+        // then
+        assertThat(result).isEqualTo(expected);
     }
 
     @Test
