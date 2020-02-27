@@ -60,7 +60,7 @@ class HttpMessageReaderDecoratorTest {
         assertThat(result).isEqualTo(expected);
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "rawtypes"})
     @Test
     void readMono() {
         // given
@@ -76,7 +76,7 @@ class HttpMessageReaderDecoratorTest {
         assertThat(result).isEqualTo(expected);
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "rawtypes"})
     @Test
     void read() {
         // given
