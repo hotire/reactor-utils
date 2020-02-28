@@ -1,4 +1,4 @@
-package com.github.hotire.reactor.utils.config;
+package com.github.hotire.reactor.utils.codec;
 
 import org.springframework.core.ResolvableType;
 import org.springframework.http.MediaType;

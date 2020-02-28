@@ -1,5 +1,6 @@
 package com.github.hotire.reactor.utils.config;
 
+import com.github.hotire.reactor.utils.codec.HttpMessageReaderDecorator;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.http.codec.HttpMessageReader;

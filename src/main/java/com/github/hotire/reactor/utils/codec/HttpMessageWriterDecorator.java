@@ -1,4 +1,4 @@
-package com.github.hotire.reactor.utils.config;
+package com.github.hotire.reactor.utils.codec;
 
 import org.reactivestreams.Publisher;
 import org.springframework.core.ResolvableType;
@@ -12,7 +12,7 @@ import java.util.Map;
 
 public class HttpMessageWriterDecorator<T> implements HttpMessageWriter<T> {
 
-    private final HttpMessageWriter<T> delegate;
+    private final HttpMessageWriter<T> deleZgate;
 
     public HttpMessageWriterDecorator(final HttpMessageWriter<T> delegate) {
         this.delegate = delegate;
