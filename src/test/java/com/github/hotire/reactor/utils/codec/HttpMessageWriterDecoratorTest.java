@@ -1,4 +1,4 @@
-package com.github.hotire.reactor.utils.config;
+package com.github.hotire.reactor.utils.codec;
 
 import com.github.hotire.reactor.utils.codec.HttpMessageWriterDecorator;
 import org.junit.jupiter.api.Test;
