@@ -12,7 +12,7 @@ import java.util.Map;
 
 public class HttpMessageWriterDecorator<T> implements HttpMessageWriter<T> {
 
-    private final HttpMessageWriter<T> deleZgate;
+    private final HttpMessageWriter<T> delegate;
 
     public HttpMessageWriterDecorator(final HttpMessageWriter<T> delegate) {
         this.delegate = delegate;
