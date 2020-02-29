@@ -16,4 +16,17 @@ class MediaTypeAdapterTest {
         // then
         assertThat(adapter).isNotNull();
     }
+
+    @Test
+    void getMediaType() {
+        // given
+        final MediaType mediaType = mock(MediaType.class);
+        final MediaTypeAdapter adapter = MediaTypeAdapter.of(mediaType);
+
+        // when
+        final MediaType result = adapter.getMediaType();
+
+        // then
+        assertThat(result).isNotNull();
+    }
 }
