@@ -8,25 +8,24 @@ import java.util.function.Consumer;
 
 public class MonoBackPressureSubscriber<T> extends BaseSubscriber<Mono<T>> {
 
-  private Integer initRequest;
+  private final Integer initRequest;
 
-  private Integer rateRequest;
+  private final Integer rateRequest;
 
-  private Consumer<T> consumer;
+  private final Consumer<T> consumer;
 
-  private Consumer<? super Throwable> errorConsumer;
+  private final Consumer<? super Throwable> doOnError;
 
-
-  private Runnable completeConsumer;
+  private final Runnable doOnSuccess;
 
   MonoBackPressureSubscriber(Integer initRequest, Integer rateRequest,
-          Consumer<T> consumer, Consumer<? super Throwable> errorConsumer,
-          Runnable completeConsumer) {
+          Consumer<T> consumer, Consumer<? super Throwable> doOnError,
+          Runnable doOnSuccess) {
     this.initRequest = initRequest;
     this.rateRequest = rateRequest;
     this.consumer = consumer;
-    this.errorConsumer = errorConsumer;
-    this.completeConsumer = completeConsumer;
+    this.doOnError = doOnError;
+    this.doOnSuccess = doOnSuccess;
   }
 
   public static<T> MonoBackPressureSubscriber<T> of(Integer initRequest, Integer rateRequest, Consumer<T> consumer) {
@@ -34,13 +33,13 @@ public class MonoBackPressureSubscriber<T> extends BaseSubscriber<Mono<T>> {
   }
 
   public static<T> MonoBackPressureSubscriber<T> of(Integer initRequest, Integer rateRequest,
-    Consumer<T> consumer, Consumer<? super Throwable> errorConsumer) {
-    return new MonoBackPressureSubscriber<>(initRequest, rateRequest, consumer, errorConsumer, ()-> {});
+    Consumer<T> consumer, Consumer<? super Throwable> doOnError) {
+    return new MonoBackPressureSubscriber<>(initRequest, rateRequest, consumer, doOnError, ()-> {});
   }
 
   public static<T> MonoBackPressureSubscriber<T> of(Integer initRequest, Integer rateRequest,
-    Consumer<T> consumer, Consumer<? super Throwable> errorConsumer, Runnable completeConsumer) {
-    return new MonoBackPressureSubscriber<>(initRequest, rateRequest, consumer, errorConsumer, completeConsumer);
+    Consumer<T> consumer, Consumer<? super Throwable> doOnError, Runnable doOnSuccess) {
+    return new MonoBackPressureSubscriber<>(initRequest, rateRequest, consumer, doOnError, doOnSuccess);
   }
 
   @Override
@@ -52,11 +51,11 @@ public class MonoBackPressureSubscriber<T> extends BaseSubscriber<Mono<T>> {
   protected void hookOnNext(Mono<T> mono) {
     mono.subscribe(consumer,
       error -> {
-        errorConsumer.accept(error);
+        doOnError.accept(error);
         request(rateRequest);
       },
       () -> {
-        completeConsumer.run();
+        doOnSuccess.run();
         request(rateRequest);
       });
   }

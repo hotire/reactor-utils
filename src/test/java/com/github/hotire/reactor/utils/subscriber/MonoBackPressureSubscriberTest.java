@@ -44,11 +44,12 @@ class MonoBackPressureSubscriberTest {
         // given
         final Consumer<?> consumer = mock(Consumer.class);
         final Consumer<? super Throwable> doOnError = mock(Consumer.class);
-        final Runnable doOncomplete = mock(Runnable.class);
+        final Runnable doOnSuccess = mock(Runnable.class);
 
         // when  then
         assertThat(MonoBackPressureSubscriber.of(1, 1, consumer)).isNotNull();
         assertThat(MonoBackPressureSubscriber.of(1, 1, consumer, doOnError)).isNotNull();
-        assertThat(MonoBackPressureSubscriber.of(1, 1, consumer, doOnError, doOncomplete)).isNotNull();
+        assertThat(MonoBackPressureSubscriber.of(1, 1, consumer, doOnError, doOnSuccess)).isNotNull();
     }
+
 }
