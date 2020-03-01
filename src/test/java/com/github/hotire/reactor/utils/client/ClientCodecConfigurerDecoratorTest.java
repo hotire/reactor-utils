@@ -104,5 +104,16 @@ class ClientCodecConfigurerDecoratorTest {
 
     @Test
     void testClone() {
+        // given
+        final ClientCodecConfigurer expected = mock(ClientCodecConfigurer.class);
+        final ClientCodecConfigurer clientCodecConfigurer = mock(ClientCodecConfigurer.class);
+        final ClientCodecConfigurerDecorator decorator = new ClientCodecConfigurerDecorator(clientCodecConfigurer);
+
+        // when
+        when(clientCodecConfigurer.clone()).thenReturn(expected);
+        final ClientCodecConfigurer result = decorator.clone();
+
+        // then
+        assertThat(result).isEqualTo(expected);
     }
 }
