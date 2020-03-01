@@ -16,14 +16,14 @@ class ClientCodecConfigurerDecoratorTest {
     @Test
     void getDelegate() {
         // given
-        final ClientCodecConfigurer clientCodecConfigurer = mock(ClientCodecConfigurer.class);
-        final ClientCodecConfigurerDecorator decorator = new ClientCodecConfigurerDecorator(clientCodecConfigurer);
+        final ClientCodecConfigurer expected = mock(ClientCodecConfigurer.class);
+        final ClientCodecConfigurerDecorator decorator = new ClientCodecConfigurerDecorator(expected);
 
         // when
         final ClientCodecConfigurer result = decorator.getDelegate();
 
         // then
-        assertThat(result).isEqualTo(clientCodecConfigurer);
+        assertThat(result).isEqualTo(expected);
     }
 
     @Test
@@ -43,16 +43,16 @@ class ClientCodecConfigurerDecoratorTest {
     @Test
     void customCodecs() {
         // given
-        final CodecConfigurer.CustomCodecs customCodecs = mock(ClientCodecConfigurer.CustomCodecs.class);
+        final CodecConfigurer.CustomCodecs expected = mock(ClientCodecConfigurer.CustomCodecs.class);
         final ClientCodecConfigurer clientCodecConfigurer = mock(ClientCodecConfigurer.class);
         final ClientCodecConfigurerDecorator decorator = new ClientCodecConfigurerDecorator(clientCodecConfigurer);
 
         // when
-        when(clientCodecConfigurer.customCodecs()).thenReturn(customCodecs);
+        when(clientCodecConfigurer.customCodecs()).thenReturn(expected);
         final CodecConfigurer.CustomCodecs result = decorator.customCodecs();
 
         // then
-        assertThat(result).isEqualTo(customCodecs);
+        assertThat(result).isEqualTo(expected);
         verify(clientCodecConfigurer, times(1)).customCodecs();
     }
 
@@ -74,32 +74,32 @@ class ClientCodecConfigurerDecoratorTest {
     void getReaders() {
         // given
         @SuppressWarnings("unchecked")
-        final List<HttpMessageReader<?>> httpMessageReaders = mock(List.class);
+        final List<HttpMessageReader<?>> expected = mock(List.class);
         final ClientCodecConfigurer clientCodecConfigurer = mock(ClientCodecConfigurer.class);
         final ClientCodecConfigurerDecorator decorator = new ClientCodecConfigurerDecorator(clientCodecConfigurer);
 
         // when
-        when(clientCodecConfigurer.getReaders()).thenReturn(httpMessageReaders);
+        when(clientCodecConfigurer.getReaders()).thenReturn(expected);
         final List<HttpMessageReader<?>> result = decorator.getReaders();
 
         // then
-        assertThat(result).isEqualTo(httpMessageReaders);
+        assertThat(result).isEqualTo(expected);
     }
 
     @Test
     void getWriters() {
         // given
         @SuppressWarnings("unchecked")
-        final List<HttpMessageWriter<?>> httpMessageWriters = mock(List.class);
+        final List<HttpMessageWriter<?>> expected = mock(List.class);
         final ClientCodecConfigurer clientCodecConfigurer = mock(ClientCodecConfigurer.class);
         final ClientCodecConfigurerDecorator decorator = new ClientCodecConfigurerDecorator(clientCodecConfigurer);
 
         // when
-        when(clientCodecConfigurer.getWriters()).thenReturn(httpMessageWriters);
+        when(clientCodecConfigurer.getWriters()).thenReturn(expected);
         final List<HttpMessageWriter<?>> result = decorator.getWriters();
 
         // then
-        assertThat(result).isEqualTo(httpMessageWriters);
+        assertThat(result).isEqualTo(expected);
     }
 
     @Test
