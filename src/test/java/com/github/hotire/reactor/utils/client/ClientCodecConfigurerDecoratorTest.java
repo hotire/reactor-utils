@@ -54,6 +54,16 @@ class ClientCodecConfigurerDecoratorTest {
 
     @Test
     void registerDefaults() {
+        // given
+        final boolean registerDefaults = true;
+        final ClientCodecConfigurer clientCodecConfigurer = mock(ClientCodecConfigurer.class);
+        final ClientCodecConfigurerDecorator decorator = new ClientCodecConfigurerDecorator(clientCodecConfigurer);
+
+        // when
+        decorator.registerDefaults(registerDefaults);
+
+        // then
+        verify(clientCodecConfigurer, times(1)).registerDefaults(registerDefaults);
     }
 
     @Test
