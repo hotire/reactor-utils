@@ -3,6 +3,10 @@ package com.github.hotire.reactor.utils.client;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.codec.ClientCodecConfigurer;
 import org.springframework.http.codec.CodecConfigurer;
+import org.springframework.http.codec.HttpMessageReader;
+import org.springframework.http.codec.HttpMessageWriter;
+
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
@@ -68,10 +72,34 @@ class ClientCodecConfigurerDecoratorTest {
 
     @Test
     void getReaders() {
+        // given
+        @SuppressWarnings("unchecked")
+        final List<HttpMessageReader<?>> httpMessageReaders = mock(List.class);
+        final ClientCodecConfigurer clientCodecConfigurer = mock(ClientCodecConfigurer.class);
+        final ClientCodecConfigurerDecorator decorator = new ClientCodecConfigurerDecorator(clientCodecConfigurer);
+
+        // when
+        when(clientCodecConfigurer.getReaders()).thenReturn(httpMessageReaders);
+        final List<HttpMessageReader<?>> result = decorator.getReaders();
+
+        // then
+        assertThat(result).isEqualTo(httpMessageReaders);
     }
 
     @Test
     void getWriters() {
+        // given
+        @SuppressWarnings("unchecked")
+        final List<HttpMessageWriter<?>> httpMessageWriters = mock(List.class);
+        final ClientCodecConfigurer clientCodecConfigurer = mock(ClientCodecConfigurer.class);
+        final ClientCodecConfigurerDecorator decorator = new ClientCodecConfigurerDecorator(clientCodecConfigurer);
+
+        // when
+        when(clientCodecConfigurer.getWriters()).thenReturn(httpMessageWriters);
+        final List<HttpMessageWriter<?>> result = decorator.getWriters();
+
+        // then
+        assertThat(result).isEqualTo(httpMessageWriters);
     }
 
     @Test
