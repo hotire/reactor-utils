@@ -17,6 +17,7 @@ public class Utf8HttpMessageWriterDecorator<T> extends HttpMessageWriterDecorato
 
     private final MediaTypeAdapter adapter = MediaTypeAdapter.of(MediaType.APPLICATION_JSON);
 
+    @SuppressWarnings("deprecation")
     @Override
     public Mono<Void> write(final Publisher<? extends T> publisher, final ResolvableType resolvableType, MediaType mediaType, final ReactiveHttpOutputMessage reactiveHttpOutputMessage, final Map<String, Object> hints) {
         if (adapter.equals(mediaType)) {
