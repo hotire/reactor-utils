@@ -37,4 +37,25 @@ class Utf8HttpMessageWriterDecoratorTest {
         verify(writer, times(1)).write(any(), any(), argumentCaptor.capture(), eq(reactiveHttpOutputMessage), anyMap());
         assertThat(argumentCaptor.getValue().toString()).isEqualTo(MediaType.APPLICATION_JSON_UTF8.toString());
     }
+
+    @SuppressWarnings({"unchecked", "deprecation"})
+    @Test
+    void write_reactiveHttpOutputMessage() {
+        // given
+        final ArgumentCaptor<MediaType> argumentCaptor = ArgumentCaptor.forClass(MediaType.class);
+        final ReactiveHttpOutputMessage reactiveHttpOutputMessage = mock(ReactiveHttpOutputMessage.class);
+        final HttpHeaders httpHeaders = mock(HttpHeaders.class);
+        final HttpMessageWriter<?> writer = mock(HttpMessageWriter.class);
+        final Utf8HttpMessageWriterDecorator<?> utf8HttpMessageWriterDecorator = new Utf8HttpMessageWriterDecorator<>(writer);
+
+        // when
+        when(reactiveHttpOutputMessage.getHeaders()).thenReturn(httpHeaders);
+        when(httpHeaders.getContentType()).thenReturn(MediaType.APPLICATION_JSON);
+        utf8HttpMessageWriterDecorator.write(mock(Publisher.class), mock(ResolvableType.class), MediaType.APPLICATION_XML, reactiveHttpOutputMessage, mock(Map.class));
+
+        // then
+        verify(httpHeaders, times(1)).setContentType(argumentCaptor.capture());
+        assertThat(argumentCaptor.getValue().toString()).isEqualTo(MediaType.APPLICATION_JSON_UTF8.toString());
+    }
+
 }
