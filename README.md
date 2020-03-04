@@ -119,3 +119,17 @@ class Configuration {
 }
 ``` 
 
+
+## Codec
+
+Provide decorator of HttpMessageReader / HttpMessageWriter.
+
+Utf8HttpMessageWriterDecorator using HttpMessageWriter is also provided
+
+```java
+public class Utf8HttpMessageWriterDecorator<T> extends HttpMessageWriterDecorator<T>{
+    //...
+    //...
+}
+```
+
