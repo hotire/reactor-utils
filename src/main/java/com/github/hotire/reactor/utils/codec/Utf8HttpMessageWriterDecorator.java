@@ -12,25 +12,21 @@ import java.util.Map;
 
 public class Utf8HttpMessageWriterDecorator<T> extends HttpMessageWriterDecorator<T>{
 
-    private final MediaTypeAdapter adapter;
+    private final MediaTypeAdapter applicationJson;
 
     public Utf8HttpMessageWriterDecorator(HttpMessageWriter<T> delegate) {
         super(delegate);
-        adapter = MediaTypeAdapter.of(MediaType.APPLICATION_JSON);
-    }
-
-    public MediaTypeAdapter getAdapter() {
-        return adapter;
+        applicationJson = MediaTypeAdapter.of(MediaType.APPLICATION_JSON);
     }
 
     @SuppressWarnings("deprecation")
     @Override
     public Mono<Void> write(final Publisher<? extends T> publisher, final ResolvableType resolvableType, MediaType mediaType, final ReactiveHttpOutputMessage reactiveHttpOutputMessage, final Map<String, Object> hints) {
-        if (getAdapter().equals(mediaType)) {
+        if (applicationJson.equals(mediaType)) {
             mediaType = MediaType.APPLICATION_JSON_UTF8;
         }
 
-        if (getAdapter().equals(reactiveHttpOutputMessage.getHeaders().getContentType())) {
+        if (applicationJson.equals(reactiveHttpOutputMessage.getHeaders().getContentType())) {
             reactiveHttpOutputMessage.getHeaders().setContentType(MediaType.APPLICATION_JSON_UTF8);
         }
 
