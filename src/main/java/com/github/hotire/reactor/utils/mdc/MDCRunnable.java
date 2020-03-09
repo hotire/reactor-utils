@@ -1,24 +1,24 @@
 package com.github.hotire.reactor.utils.mdc;
 
+import java.util.Map;
+
 public class MDCRunnable implements Runnable{
 
   private final Runnable delegate;
-  private final Runnable doOnExecute;
-  private final Runnable doOnTerminate;
+  private final Map<String, String> contextMap;
 
-  public MDCRunnable(Runnable delegate,Runnable doOnExecute, Runnable doOnTerminate) {
+  public MDCRunnable(final Runnable delegate, final Map<String, String> contextMap) {
     this.delegate = delegate;
-    this.doOnExecute = doOnExecute;
-    this.doOnTerminate = doOnTerminate;
+    this.contextMap = contextMap;
   }
 
   @Override
   public void run() {
     try {
-      doOnExecute.run();
+      MDCUtils.putAll(contextMap);
       delegate.run();
     } finally {
-      doOnTerminate.run();
+      MDCUtils.clear();
     }
   }
 }

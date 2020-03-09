@@ -1,27 +1,26 @@
 package com.github.hotire.reactor.utils.mdc;
 
+import java.util.Map;
 import java.util.concurrent.Callable;
 
 
 public class MDCCallable<T> implements Callable<T> {
 
   private final Callable<T> delegate;
-  private final Runnable doOnExecute;
-  private final Runnable doOnTerminate;
+  private final Map<String, String> contextMap;
 
-  public MDCCallable(Callable<T> delegate,Runnable doOnExecute, Runnable doOnTerminate) {
+  public MDCCallable(final Callable<T> delegate,final Map<String, String> contextMap) {
     this.delegate = delegate;
-    this.doOnExecute = doOnExecute;
-    this.doOnTerminate = doOnTerminate;
+    this.contextMap = contextMap;
   }
 
   @Override
   public T call() throws Exception {
     try {
-      doOnExecute.run();
+      MDCUtils.putAll(contextMap);
       return delegate.call();
     } finally {
-      doOnTerminate.run();
+      MDCUtils.clear();
     }
   }
 }

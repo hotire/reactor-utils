@@ -2,7 +2,6 @@ package com.github.hotire.reactor.utils.mdc;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.*;
 
 import static java.util.stream.Collectors.toList;
@@ -11,23 +10,17 @@ import static java.util.stream.Collectors.toList;
 public class MDCScheduledExecutorServiceDecorator implements ScheduledExecutorService {
 
   private final ScheduledExecutorService delegate;
-  private final Runnable doOnExecute;
-  private final Runnable doOnTerminate;
 
   public MDCScheduledExecutorServiceDecorator(ScheduledExecutorService delegate) {
     this.delegate = delegate;
-    final Map<String, String> copyContextMap = MDCUtils.getContextMap();
-    this.doOnExecute = () -> copyContextMap.forEach(MDCUtils::put);
-    this.doOnTerminate = () -> copyContextMap.forEach((key, value) -> MDCUtils.remove(key));
-
   }
 
   protected Runnable decorateRunnable(Runnable runnable) {
-    return new MDCRunnable(runnable, doOnExecute, doOnTerminate);
+    return new MDCRunnable(runnable, MDCUtils.getContextMap());
   }
 
   protected <T> Callable<T> decorateCallable(Callable<T> callable) {
-    return new MDCCallable<>(callable, doOnExecute, doOnExecute);
+    return new MDCCallable<>(callable, MDCUtils.getContextMap());
   }
 
   protected <T> Collection<? extends Callable<T>> wrapCallableCollection(

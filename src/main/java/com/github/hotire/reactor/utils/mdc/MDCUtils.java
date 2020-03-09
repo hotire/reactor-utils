@@ -21,6 +21,10 @@ public class MDCUtils {
     ADAPTER.put(key, value);
   }
 
+  public static void putAll(Map<String, String> contextMap) {
+    ADAPTER.setContextMap(contextMap);
+  }
+
   public static void remove(String key) {
     ADAPTER.remove(key);
   }
