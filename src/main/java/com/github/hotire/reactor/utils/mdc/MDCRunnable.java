@@ -15,10 +15,10 @@ public class MDCRunnable implements Runnable{
   @Override
   public void run() {
     try {
-      MDCUtils.putAll(contextMap);
+      contextMap.forEach(MDCUtils::put);
       delegate.run();
     } finally {
-      MDCUtils.clear();
+      contextMap.forEach((key, value) -> MDCUtils.remove(key));
     }
   }
 }

@@ -17,10 +17,10 @@ public class MDCCallable<T> implements Callable<T> {
   @Override
   public T call() throws Exception {
     try {
-      MDCUtils.putAll(contextMap);
+      contextMap.forEach(MDCUtils::put);
       return delegate.call();
     } finally {
-      MDCUtils.clear();
+      contextMap.forEach((key, value) -> MDCUtils.remove(key));
     }
   }
 }
