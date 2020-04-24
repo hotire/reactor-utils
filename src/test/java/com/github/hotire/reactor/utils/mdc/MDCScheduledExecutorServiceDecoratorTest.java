@@ -1,13 +1,14 @@
 package com.github.hotire.reactor.utils.mdc;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
+import org.assertj.core.util.Lists;
+import org.junit.jupiter.api.Test;
 
 import java.util.Collection;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ScheduledExecutorService;
-import org.assertj.core.util.Lists;
-import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
 
 
 class MDCScheduledExecutorServiceDecoratorTest {
@@ -48,5 +49,4 @@ class MDCScheduledExecutorServiceDecoratorTest {
     assertThat(result.size()).isEqualTo(1);
     result.forEach(callable -> assertThat(callable).isInstanceOf(MDCCallable.class));
   }
-
 }

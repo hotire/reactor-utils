@@ -57,5 +57,4 @@ class Utf8HttpMessageWriterDecoratorTest {
         verify(httpHeaders, times(1)).setContentType(argumentCaptor.capture());
         assertThat(argumentCaptor.getValue().toString()).isEqualTo(MediaType.APPLICATION_JSON_UTF8.toString());
     }
-
 }
