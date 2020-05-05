@@ -4,6 +4,7 @@ import org.springframework.http.MediaType;
 
 import java.util.Optional;
 
+@FunctionalInterface
 public interface MediaTypeContext extends MediaTypeAware {
     default boolean equals(final MediaType mediaType) {
         return Optional.ofNullable(mediaType)
