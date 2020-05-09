@@ -39,7 +39,7 @@ public class ConstraintValidator extends SpringValidatorAdapter {
           }
 
         } catch (Exception e) {
-          log.warn("validate constraint error : {}", e);
+          log.warn("validate constraint error : ", e);
         }
       });
   }
