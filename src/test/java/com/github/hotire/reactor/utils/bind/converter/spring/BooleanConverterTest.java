@@ -8,13 +8,13 @@ class BooleanConverterTest {
 
   @Test
   void convert() {
-    // Given
+    // given
     final BooleanConverter converter = new BooleanConverter();
 
-    // When
+    // when
     final Boolean result = converter.convert("true");
 
-    // Then
+    // then
     assertThat(result).isEqualTo(true);
   }
 }
