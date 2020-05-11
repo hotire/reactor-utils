@@ -1,10 +1,7 @@
 package com.github.hotire.reactor.utils.bind;
 
 
-import com.github.hotire.reactor.utils.bind.converter.beanutils.LocalDateConverter;
-import com.github.hotire.reactor.utils.bind.converter.beanutils.LocalDateTimeConverter;
-import com.github.hotire.reactor.utils.bind.converter.beanutils.MonthConverter;
-import com.github.hotire.reactor.utils.bind.converter.beanutils.YearConverter;
+import com.github.hotire.reactor.utils.bind.converter.beanutils.*;
 import com.github.hotire.reactor.utils.bind.converter.spring.BooleanConverter;
 import com.github.hotire.reactor.utils.bind.converter.spring.LongConverter;
 import com.github.hotire.reactor.utils.bind.validation.BindingResultException;
@@ -40,10 +37,12 @@ public class BindingUtils {
     ConvertUtils.register(new LocalDateTimeConverter(), LocalDateTime.class);
     ConvertUtils.register(new MonthConverter(), Month.class);
     ConvertUtils.register(new YearConverter(), Year.class);
+    ConvertUtils.register(new OffsetDateTimeConverter(), OffsetDateTimeConverter.class);
 
     final GenericConversionService conversionService = new GenericConversionService();
     conversionService.addConverter(new LongConverter());
     conversionService.addConverter(new BooleanConverter());
+    conversionService.addConverter(new com.github.hotire.reactor.utils.bind.converter.spring.OffsetDateTimeConverter());
 
     final LocalValidatorFactoryBean localValidatorFactoryBean = new LocalValidatorFactoryBean();
     localValidatorFactoryBean.afterPropertiesSet();
