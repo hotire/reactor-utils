@@ -35,11 +35,13 @@ public class BindingUtils {
     ConvertUtils.register(new MonthConverter(), Month.class);
     ConvertUtils.register(new YearConverter(), Year.class);
     ConvertUtils.register(new OffsetDateTimeConverter(), OffsetDateTime.class);
+    ConvertUtils.register(new InstantConverter(), Instant.class);
 
     final GenericConversionService conversionService = new GenericConversionService();
     conversionService.addConverter(new LongConverter());
     conversionService.addConverter(new BooleanConverter());
     conversionService.addConverter(new com.github.hotire.reactor.utils.bind.converter.spring.OffsetDateTimeConverter());
+    conversionService.addConverter(new com.github.hotire.reactor.utils.bind.converter.spring.InstantConverter());
 
     final LocalValidatorFactoryBean localValidatorFactoryBean = new LocalValidatorFactoryBean();
     localValidatorFactoryBean.afterPropertiesSet();
