@@ -15,10 +15,7 @@ import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import reactor.core.publisher.Mono;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.Month;
-import java.time.Year;
+import java.time.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -37,7 +34,7 @@ public class BindingUtils {
     ConvertUtils.register(new LocalDateTimeConverter(), LocalDateTime.class);
     ConvertUtils.register(new MonthConverter(), Month.class);
     ConvertUtils.register(new YearConverter(), Year.class);
-    ConvertUtils.register(new OffsetDateTimeConverter(), OffsetDateTimeConverter.class);
+    ConvertUtils.register(new OffsetDateTimeConverter(), OffsetDateTime.class);
 
     final GenericConversionService conversionService = new GenericConversionService();
     conversionService.addConverter(new LongConverter());
