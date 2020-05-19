@@ -10,6 +10,6 @@ class EnableConverterTest {
     @Disabled
     @Test
     void scan() {
-        // TODO EnableBeanUtils Scan
+        // TODO Scan
     }
 }
