@@ -36,6 +36,7 @@ public class BindingUtils {
     ConvertUtils.register(new YearConverter(), Year.class);
     ConvertUtils.register(new OffsetDateTimeConverter(), OffsetDateTime.class);
     ConvertUtils.register(new InstantConverter(), Instant.class);
+    ConvertUtils.register(new ZonedDateTimeConverter(), ZonedDateTimeConverter.class);
 
     final GenericConversionService conversionService = new GenericConversionService();
     conversionService.addConverter(new LongConverter());
