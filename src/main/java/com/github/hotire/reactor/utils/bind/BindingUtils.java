@@ -1,7 +1,14 @@
 package com.github.hotire.reactor.utils.bind;
 
 
-import com.github.hotire.reactor.utils.bind.converter.beanutils.*;
+import com.github.hotire.reactor.utils.bind.converter.Converter;
+import com.github.hotire.reactor.utils.bind.converter.InstantConverter;
+import com.github.hotire.reactor.utils.bind.converter.OffsetDateTimeConverter;
+import com.github.hotire.reactor.utils.bind.converter.ZonedDateTimeConverter;
+import com.github.hotire.reactor.utils.bind.converter.beanutils.LocalDateConverter;
+import com.github.hotire.reactor.utils.bind.converter.beanutils.LocalDateTimeConverter;
+import com.github.hotire.reactor.utils.bind.converter.beanutils.MonthConverter;
+import com.github.hotire.reactor.utils.bind.converter.beanutils.YearConverter;
 import com.github.hotire.reactor.utils.bind.converter.spring.BooleanConverter;
 import com.github.hotire.reactor.utils.bind.converter.spring.LongConverter;
 import com.github.hotire.reactor.utils.bind.validation.BindingResultException;
@@ -34,21 +41,25 @@ public class BindingUtils {
     ConvertUtils.register(new LocalDateTimeConverter(), LocalDateTime.class);
     ConvertUtils.register(new MonthConverter(), Month.class);
     ConvertUtils.register(new YearConverter(), Year.class);
-    ConvertUtils.register(new OffsetDateTimeConverter(), OffsetDateTime.class);
-    ConvertUtils.register(new InstantConverter(), Instant.class);
-    ConvertUtils.register(new ZonedDateTimeConverter(), ZonedDateTimeConverter.class);
 
-    final GenericConversionService conversionService = new GenericConversionService();
-    conversionService.addConverter(new LongConverter());
-    conversionService.addConverter(new BooleanConverter());
-    conversionService.addConverter(new com.github.hotire.reactor.utils.bind.converter.spring.OffsetDateTimeConverter());
-    conversionService.addConverter(new com.github.hotire.reactor.utils.bind.converter.spring.InstantConverter());
+    final GenericConversionService service = new GenericConversionService();
+    service.addConverter(new LongConverter());
+    service.addConverter(new BooleanConverter());
+
+    registerConverter(service, new OffsetDateTimeConverter(), OffsetDateTime.class);
+    registerConverter(service, new InstantConverter(), Instant.class);
+    registerConverter(service, new ZonedDateTimeConverter(), ZonedDateTime.class);
 
     final LocalValidatorFactoryBean localValidatorFactoryBean = new LocalValidatorFactoryBean();
     localValidatorFactoryBean.afterPropertiesSet();
 
-    CONVERTER = conversionService;
+    CONVERTER = service;
     VALIDATOR = new ConstraintValidator(localValidatorFactoryBean);
+  }
+
+  protected static <T> void registerConverter(final GenericConversionService service, final Converter<String, T> converter, Class<T> tClass) {
+    service.addConverter(converter);
+    ConvertUtils.register(converter, tClass);
   }
 
   public static <T> T bind(final ServerRequest request, final Class<T> type) {
