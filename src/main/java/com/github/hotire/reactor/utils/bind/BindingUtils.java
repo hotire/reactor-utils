@@ -37,15 +37,18 @@ public class BindingUtils {
   private BindingUtils() {}
 
   static {
+    // beanUtils
     ConvertUtils.register(new LocalDateConverter(), LocalDate.class);
     ConvertUtils.register(new LocalDateTimeConverter(), LocalDateTime.class);
     ConvertUtils.register(new MonthConverter(), Month.class);
     ConvertUtils.register(new YearConverter(), Year.class);
 
+    // spring
     final GenericConversionService service = new GenericConversionService();
     service.addConverter(new LongConverter());
     service.addConverter(new BooleanConverter());
 
+    // common
     registerConverter(service, new OffsetDateTimeConverter(), OffsetDateTime.class);
     registerConverter(service, new InstantConverter(), Instant.class);
     registerConverter(service, new ZonedDateTimeConverter(), ZonedDateTime.class);
