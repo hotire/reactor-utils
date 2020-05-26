@@ -4,12 +4,12 @@ import java.time.ZonedDateTime;
 
 public class ZonedDateTimeConverter implements Converter<String, ZonedDateTime> {
     @Override
-    public <T> T convert(Class<T> type, Object value) {
+    public <T> T convert(final Class<T> type, final Object value) {
         return type.cast(ZonedDateTime.parse((String)value));
     }
 
     @Override
-    public ZonedDateTime convert(String source) {
+    public ZonedDateTime convert(final String source) {
         return ZonedDateTime.parse(source);
     }
 }
