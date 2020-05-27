@@ -30,7 +30,7 @@ class OffsetDateTimeConverterTest {
         final OffsetDateTime result = converter.convert(OffsetDateTime.class, expected);
 
         // then
-        assertThat(result.toString()).isEqualTo(expected);
+        assertThat(result).isEqualTo(expected);
     }
 
 }
