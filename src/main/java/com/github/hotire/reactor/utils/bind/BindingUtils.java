@@ -98,9 +98,10 @@ public class BindingUtils {
   }
 
   public static <T> Optional<T> bindOne(final ServerRequest request, final Class<T> type) {
-    if (!CONVERTER.canConvert(String.class, type)) {
-      throw new IllegalArgumentException("Cannot convert type : " + type);
-    }
+    Optional.ofNullable(type)
+            .filter(t -> CONVERTER.canConvert(String.class, t))
+            .orElseThrow(() -> new IllegalArgumentException("Cannot convert type : " + type));
+
     final AtomicReference<T> atomicReference = new AtomicReference<>();
     request.queryParams().forEach((key, values) -> atomicReference.set(CONVERTER.convert(values.get(0), type)));
     request.pathVariables().forEach((key, value) -> atomicReference.set(CONVERTER.convert(value, type)));
