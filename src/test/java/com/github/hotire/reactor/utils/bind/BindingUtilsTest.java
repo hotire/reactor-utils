@@ -117,6 +117,22 @@ class BindingUtilsTest {
     assertThat(result).isEqualTo(true);
   }
 
+  @Test
+  void bindOneToMono(){
+    // Given
+    final ServerRequest request = mock(ServerRequest.class);
+    final Map<String, String> map = new HashMap<>();
+    map.put("test", "true");
+
+    // When
+    when(request.pathVariables()).thenReturn(map);
+    when(request.queryParams()).thenReturn(new LinkedMultiValueMap<>());
+    final Mono<Boolean> result = BindingUtils.bindOneToMono(request, Boolean.class);
+
+    // Then
+    StepVerifier.create(result).expectNext(true).verifyComplete();
+  }
+
   public static class Data {
     private String name;
     private LocalDate date;
