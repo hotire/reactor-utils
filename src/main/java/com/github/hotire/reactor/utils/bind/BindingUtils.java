@@ -99,7 +99,7 @@ public class BindingUtils {
 
   public static <T> Optional<T> bindOne(final ServerRequest request, final Class<T> type) {
     Optional.ofNullable(type)
-            .filter(t -> CONVERTER.canConvert(String.class, t))
+            .filter(it -> CONVERTER.canConvert(String.class, it))
             .orElseThrow(() -> new IllegalArgumentException("Cannot convert type : " + type));
 
     final AtomicReference<T> atomicReference = new AtomicReference<>();
