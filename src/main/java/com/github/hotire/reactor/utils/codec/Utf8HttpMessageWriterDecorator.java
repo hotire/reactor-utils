@@ -14,7 +14,7 @@ public class Utf8HttpMessageWriterDecorator<T> extends HttpMessageWriterDecorato
 
     private final MediaTypeAdapter applicationJson;
 
-    public Utf8HttpMessageWriterDecorator(HttpMessageWriter<T> delegate) {
+    public Utf8HttpMessageWriterDecorator(final HttpMessageWriter<T> delegate) {
         super(delegate);
         applicationJson = MediaTypeAdapter.of(MediaType.APPLICATION_JSON);
     }
