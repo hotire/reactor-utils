@@ -38,11 +38,8 @@ public class ReactiveCacheManager {
 
     public <T> Flux<T> cacheFlux(final String cacheName, final Object key, final Supplier<Flux<T>> retriever, final Class<T> classType) {
         return CacheFlux
-                .lookup(k -> Mono.justOrEmpty(getCache(cacheName).get(k, classType))
-                             .map(list -> (List<T>)list)
-                             .map(list -> list.stream()
-                                              .map(Signal::next)
-                                              .collect(toList())), key)
+                .lookup(k -> Mono.justOrEmpty(getCache(cacheName).get(k, List.class))
+                                .map(list -> (List<Signal<T>>) list), key)
                 .onCacheMissResume(Flux.defer(retriever))
                 .andWriteWith((k, signalList) -> Mono.just(signalList)
                                                      .doOnNext(list -> getCache(cacheName).put(k, list))

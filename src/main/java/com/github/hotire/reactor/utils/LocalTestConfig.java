@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Import(ReactiveCacheAspect.class)
@@ -52,9 +53,20 @@ public class LocalTestConfig {
             return helloService.hello(id);
         }
 
+        @GetMapping("/test/flux/{id}")
+        public Flux<String> testFlux(@PathVariable final String id) {
+            return helloService.helloFlux(id);
+        }
+
+
         @GetMapping("/cache/{id}")
         public Mono<String> cache(@PathVariable final String id) {
-            return reactiveCacheManager.findCachedMono("cache", id, () ->  helloService.hello(id), String.class);
+            return reactiveCacheManager.cacheMono("cache", id, () ->  helloService.hello(id), String.class);
+        }
+
+        @GetMapping("/cache/flux/{id}")
+        public Flux<String> cacheFlux(@PathVariable final String id) {
+            return reactiveCacheManager.cacheFlux("cache", id, () ->  helloService.helloFlux(id), String.class);
         }
 
         @GetMapping("/hello/{id}")
@@ -76,6 +88,17 @@ public class LocalTestConfig {
                 System.out.println("hello");
                 monoSink.success("hello");
             });
+        }
+
+//        @ReactiveCacheable(name = "hello", key = "'id:' + #id")
+        public Flux<String> helloFlux(final String id) {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            System.out.println("stop");
+            return Flux.just("1", "2", "3");
         }
 
         @ReactiveCacheable(name = "hello", key = "'id:' + #id")

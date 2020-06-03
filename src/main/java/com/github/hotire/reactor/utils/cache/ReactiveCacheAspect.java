@@ -32,7 +32,7 @@ public class ReactiveCacheAspect {
         final MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
         final String key = parseSpel(methodSignature.getParameterNames(), joinPoint.getArgs(), reactiveCacheable.key());
 
-        return reactiveCacheManager.findCachedMono(reactiveCacheable.name(), key, methodSignature.getReturnType());
+        return reactiveCacheManager.cacheMono(reactiveCacheable.name(), key, methodSignature.getReturnType());
     }
 
 
