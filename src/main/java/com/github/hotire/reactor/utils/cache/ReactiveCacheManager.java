@@ -27,7 +27,7 @@ public class ReactiveCacheManager {
                 .andWriteWith((k, signal) -> Mono.just(signal)
                                                  .filter(it -> !it.isOnError())
                                                  .doOnNext(it -> getCache(cacheName).put(k, it.get()))
-                                                 .thenEmpty(Mono.empty()));
+                                                 .then());
     }
 
     public <T> Mono<T> cacheMono(final String cacheName, final Object key, final Class<T> classType) {
