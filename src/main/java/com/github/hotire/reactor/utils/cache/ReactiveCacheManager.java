@@ -31,7 +31,7 @@ public class ReactiveCacheManager {
     }
 
     public <T> Mono<T> cacheMono(final String cacheName, final Object key, final Class<T> classType) {
-        return cacheMono(cacheName, key, () -> null, classType);
+        return cacheMono(cacheName, key, Mono::empty, classType);
     }
 
     public <T> Flux<T> cacheFlux(final String cacheName, final Object key, final Supplier<Flux<T>> retriever, final Class<T> classType) {
