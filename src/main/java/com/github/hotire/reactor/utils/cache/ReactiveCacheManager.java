@@ -44,6 +44,10 @@ public class ReactiveCacheManager {
                                                      .then());
     }
 
+    public <T> Flux<T> cacheFlux(final String cacheName, final Object key, final Class<T> classType) {
+        return cacheFlux(cacheName, key, Flux::empty, classType);
+    }
+
     protected Cache getCache(final String name) {
         return Objects.requireNonNull(cacheManager.getCache(name));
     }
