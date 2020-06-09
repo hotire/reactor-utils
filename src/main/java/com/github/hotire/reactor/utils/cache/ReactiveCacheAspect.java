@@ -27,7 +27,7 @@ public class ReactiveCacheAspect {
 
     @SuppressWarnings("unchecked")
     @Around("@annotation(reactiveCacheable)")
-    public Object around(final ProceedingJoinPoint joinPoint, final ReactiveCacheable reactiveCacheable) {
+    public Object cache(final ProceedingJoinPoint joinPoint, final ReactiveCacheable reactiveCacheable) {
         final MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
         final String key = parseSpel(methodSignature.getParameterNames(), joinPoint.getArgs(), reactiveCacheable.key());
 
@@ -44,6 +44,21 @@ public class ReactiveCacheAspect {
         };
 
         return reactiveCacheManager.cacheMono(reactiveCacheable.name(), key, retriever, returnClass);
+    }
+
+    @Around("@annotation(reactiveCacheEvict)")
+    public Object evict(final ProceedingJoinPoint joinPoint, final ReactiveCacheEvict reactiveCacheEvict) {
+        // TODO evict
+
+        final Supplier retriever = () -> {
+            try {
+                return joinPoint.proceed();
+            } catch (Throwable e) {
+                throw new RuntimeException(e);
+            }
+        };
+
+        return retriever.get();
     }
 
 
