@@ -53,6 +53,10 @@ public class ReactiveCacheManager {
         return cacheFlux(cacheName, key, Flux::empty, classType);
     }
 
+    public Mono<Void> evictMono(final String cacheName, final Object key) {
+        return Mono.fromRunnable(() -> getCache(cacheName).evict(key));
+    }
+
     protected Cache getCache(final String name) {
         return Objects.requireNonNull(cacheManager.getCache(name));
     }
