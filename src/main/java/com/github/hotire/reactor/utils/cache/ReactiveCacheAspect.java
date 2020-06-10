@@ -9,6 +9,7 @@ import org.springframework.core.ResolvableType;
 import org.springframework.expression.EvaluationContext;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
+import reactor.core.publisher.Mono;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
@@ -48,17 +49,19 @@ public class ReactiveCacheAspect {
 
     @Around("@annotation(reactiveCacheEvict)")
     public Object evict(final ProceedingJoinPoint joinPoint, final ReactiveCacheEvict reactiveCacheEvict) {
-        // TODO evict
+        final MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
+        final String key = parseSpel(methodSignature.getParameterNames(), joinPoint.getArgs(), reactiveCacheEvict.key());
 
-        final Supplier retriever = () -> {
+        final Supplier<Mono<?>> retriever = () -> {
             try {
-                return joinPoint.proceed();
+                return (Mono<?>) joinPoint.proceed();
             } catch (Throwable e) {
                 throw new RuntimeException(e);
             }
         };
 
-        return retriever.get();
+        return reactiveCacheManager.evictMono(reactiveCacheEvict.name(), key)
+                                   .then(retriever.get());
     }
 
 
