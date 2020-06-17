@@ -64,7 +64,6 @@ public class ReactiveCacheAspect {
                                    .then(retriever.get());
     }
 
-
     protected String parseSpel(final String[] params, final Object[] arguments, final String spel) {
         final EvaluationContext context = new StandardEvaluationContext();
 

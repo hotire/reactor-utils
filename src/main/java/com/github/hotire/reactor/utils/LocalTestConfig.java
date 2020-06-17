@@ -1,5 +1,6 @@
 package com.github.hotire.reactor.utils;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.hotire.reactor.utils.cache.ReactiveCacheAspect;
 import com.github.hotire.reactor.utils.cache.ReactiveCacheManager;
 import com.github.hotire.reactor.utils.cache.ReactiveCacheable;
@@ -35,8 +36,8 @@ public class LocalTestConfig {
     }
 
     @Bean
-    public ReactiveCacheManager reactiveCacheManager() {
-        return new ReactiveCacheManager(localSimpleCacheManager());
+    public ReactiveCacheManager reactiveCacheManager(final ObjectMapper objectMapper) {
+        return new ReactiveCacheManager(localSimpleCacheManager(), objectMapper);
     }
 
     @RestController
