@@ -13,10 +13,10 @@ class ZonedDateTimeConverterTest {
     void convert() {
         // given
         final String value = "2002-06-18T20:30+09:00[Asia/Seoul]";
-        final OffsetDateTimeConverter converter = new OffsetDateTimeConverter();
+        final ZonedDateTimeConverter converter = new ZonedDateTimeConverter();
 
         // when
-        final OffsetDateTime result = converter.convert(value);
+        final ZonedDateTime result = converter.convert(value);
 
         // then
         assertThat(result).isEqualTo(value);
