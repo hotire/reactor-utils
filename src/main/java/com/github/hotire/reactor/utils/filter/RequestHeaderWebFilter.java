@@ -13,18 +13,18 @@ public class RequestHeaderWebFilter implements WebfluxFilter {
 
     @Override
     public Mono<Void> filter(final ServerWebExchange exchange, final WebFilterChain chain) {
-        exchange.getRequest()
-                .getHeaders()
-                .forEach((key, value) -> log.debug("key : [{}] / value : {}", key, value));
-        return chain.filter(exchange);
+        return chain.filter(exchange)
+                    .doOnSubscribe(subscription -> exchange.getRequest()
+                                                           .getHeaders()
+                                                           .forEach((key, value) -> log.debug("key : [{}] / value : {}", key, value)));
     }
 
     @Override
     public Mono<ServerResponse> filter(final ServerRequest serverRequest, final HandlerFunction<ServerResponse> handlerFunction) {
-        serverRequest.exchange()
-                     .getRequest()
-                     .getHeaders()
-                     .forEach((key, value) -> log.debug("key : [{}] / value : {}", key, value));
-        return handlerFunction.handle(serverRequest);
+        return handlerFunction.handle(serverRequest)
+                              .doOnSubscribe(subscription -> serverRequest.exchange()
+                                                                          .getRequest()
+                                                                          .getHeaders()
+                                                                          .forEach((key, value) -> log.debug("key : [{}] / value : {}", key, value)));
     }
 }
