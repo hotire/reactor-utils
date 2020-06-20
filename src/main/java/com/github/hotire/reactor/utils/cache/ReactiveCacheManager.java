@@ -62,6 +62,6 @@ public class ReactiveCacheManager {
     }
 
     protected <T> T cast(final Object target, final TypeReference<T> typeReference) {
-        return new ObjectMapper().convertValue(target, typeReference);
+        return objectMapper.convertValue(target, typeReference);
     }
 }
