@@ -14,10 +14,7 @@ import reactor.core.publisher.Mono;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.Arrays;
-import java.util.Optional;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 @Aspect
@@ -73,11 +70,4 @@ public class ReactiveCacheAspect {
         return new SpelExpressionParser().parseExpression(spel).getValue(context, String.class);
     }
 
-    protected String generateKey(final Object... objects) {
-        return Arrays.stream(objects)
-                     .map(obj -> Optional.ofNullable(obj)
-                                         .map(Object::toString)
-                                         .orElse(null))
-                     .collect(Collectors.joining(":"));
-    }
 }
