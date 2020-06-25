@@ -25,40 +25,29 @@ public class ReactiveCacheAspect {
 
     @SuppressWarnings("unchecked")
     @Around("@annotation(reactiveCacheable)")
-    public Object cache(final ProceedingJoinPoint joinPoint, final ReactiveCacheable reactiveCacheable) {
+    public Object cache(final ProceedingJoinPoint joinPoint, final ReactiveCacheable reactiveCacheable) throws Throwable {
         final MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
         final String key = parseSpel(methodSignature.getParameterNames(), joinPoint.getArgs(), reactiveCacheable.key());
 
         final Method method = methodSignature.getMethod();
-        final ParameterizedType parameterizedType = (ParameterizedType) method.getGenericReturnType();
-        final Type returnTypeInsideMono = parameterizedType.getActualTypeArguments()[0];
-        final Class<?> returnClass = ResolvableType.forType(returnTypeInsideMono).resolve();
-        final Supplier retriever = () -> {
-            try {
-                return joinPoint.proceed();
-            } catch (Throwable e) {
-                throw new RuntimeException(e);
-            }
-        };
+        if (Mono.class.equals(method.getReturnType())) {
+            final ParameterizedType parameterizedType = (ParameterizedType) method.getGenericReturnType();
+            final Type returnTypeInsideMono = parameterizedType.getActualTypeArguments()[0];
+            final Class<?> returnClass = ResolvableType.forType(returnTypeInsideMono).resolve();
+            return reactiveCacheManager.cacheMono(reactiveCacheable.name(), key, retriever(joinPoint), returnClass);
+        }
 
-        return reactiveCacheManager.cacheMono(reactiveCacheable.name(), key, retriever, returnClass);
+        return joinPoint.proceed();
     }
 
+    @SuppressWarnings("unchecked")
     @Around("@annotation(reactiveCacheEvict)")
     public Object evict(final ProceedingJoinPoint joinPoint, final ReactiveCacheEvict reactiveCacheEvict) {
         final MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
         final String key = parseSpel(methodSignature.getParameterNames(), joinPoint.getArgs(), reactiveCacheEvict.key());
 
-        final Supplier<Mono<?>> retriever = () -> {
-            try {
-                return (Mono<?>) joinPoint.proceed();
-            } catch (Throwable e) {
-                throw new RuntimeException(e);
-            }
-        };
-
         return reactiveCacheManager.evictMono(reactiveCacheEvict.name(), key)
-                                   .then(retriever.get());
+                                   .then((Mono<?>)retriever(joinPoint));
     }
 
     protected String parseSpel(final String[] params, final Object[] arguments, final String spel) {
@@ -68,6 +57,17 @@ public class ReactiveCacheAspect {
                  .forEach(index ->  context.setVariable(params[index], arguments[index]));
 
         return new SpelExpressionParser().parseExpression(spel).getValue(context, String.class);
+    }
+
+    @SuppressWarnings("rawtypes")
+    protected Supplier retriever(final ProceedingJoinPoint joinPoint) {
+        return () -> {
+            try {
+                return joinPoint.proceed();
+            } catch (Throwable e) {
+                throw new RuntimeException(e);
+            }
+        };
     }
 
 }
