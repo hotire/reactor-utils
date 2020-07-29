@@ -50,7 +50,7 @@ public class MDCScheduledExecutorServiceDecorator implements ScheduledExecutorSe
   @Override
   public ScheduledFuture<?> scheduleWithFixedDelay(Runnable command, long initialDelay, long delay,
     TimeUnit unit) {
-    return getDelegate().scheduleAtFixedRate(decorateRunnable(command), initialDelay, delay, unit);
+    return getDelegate().scheduleWithFixedDelay(decorateRunnable(command), initialDelay, delay, unit);
   }
 
   @Override
