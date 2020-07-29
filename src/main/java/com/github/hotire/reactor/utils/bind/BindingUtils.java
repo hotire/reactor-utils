@@ -22,6 +22,7 @@ import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import reactor.core.publisher.Mono;
 
+import java.lang.reflect.InvocationTargetException;
 import java.time.*;
 import java.util.HashMap;
 import java.util.Map;
@@ -70,8 +71,9 @@ public class BindingUtils {
   }
 
   public static <T> T bind(final ServerRequest request, final Class<T> type, boolean isValidation) {
+
     try {
-      final T instance = type.getConstructor().newInstance();
+      final T instance  = type.getConstructor().newInstance();
 
       final Map<String, String> queryParams = new HashMap<>();
       request.queryParams().forEach((s, strings) -> queryParams.put(s, strings.get(0)));
@@ -84,7 +86,7 @@ public class BindingUtils {
       }
 
       return instance;
-    } catch (Exception e) {
+    } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
       throw new RuntimeException(e);
     }
   }
