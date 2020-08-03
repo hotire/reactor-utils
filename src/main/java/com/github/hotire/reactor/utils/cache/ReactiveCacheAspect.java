@@ -9,6 +9,7 @@ import org.springframework.core.ResolvableType;
 import org.springframework.expression.EvaluationContext;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.lang.reflect.Method;
@@ -30,11 +31,20 @@ public class ReactiveCacheAspect {
         final String key = parseSpel(methodSignature.getParameterNames(), joinPoint.getArgs(), reactiveCacheable.key());
 
         final Method method = methodSignature.getMethod();
-        if (Mono.class.equals(method.getReturnType())) {
+
+        final Supplier<Class<?>> returnClass = () -> {
             final ParameterizedType parameterizedType = (ParameterizedType) method.getGenericReturnType();
             final Type returnTypeInsideMono = parameterizedType.getActualTypeArguments()[0];
-            final Class<?> returnClass = ResolvableType.forType(returnTypeInsideMono).resolve();
-            return reactiveCacheManager.cacheMono(reactiveCacheable.name(), key, retriever(joinPoint), returnClass);
+            return  ResolvableType.forType(returnTypeInsideMono).resolve();
+        };
+
+
+        if (Mono.class.equals(method.getReturnType())) {
+            return reactiveCacheManager.cacheMono(reactiveCacheable.name(), key, retriever(joinPoint), returnClass.get());
+        }
+
+        if (Flux.class.equals(method.getReturnType())) {
+            return reactiveCacheManager.cacheFlux(reactiveCacheable.name(), key, retriever(joinPoint), returnClass.get());
         }
 
         return joinPoint.proceed();
@@ -46,7 +56,7 @@ public class ReactiveCacheAspect {
         final MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
         final String key = parseSpel(methodSignature.getParameterNames(), joinPoint.getArgs(), reactiveCacheEvict.key());
 
-        return reactiveCacheManager.evictMono(reactiveCacheEvict.name(), key)
+        return reactiveCacheManager.evict(reactiveCacheEvict.name(), key)
                                    .then((Mono<?>)retriever(joinPoint));
     }
 
