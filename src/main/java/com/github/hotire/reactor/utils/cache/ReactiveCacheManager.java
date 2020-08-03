@@ -1,7 +1,6 @@
 package com.github.hotire.reactor.utils.cache;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import reactor.cache.CacheFlux;
@@ -14,15 +13,10 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.Supplier;
 
+@RequiredArgsConstructor
 public class ReactiveCacheManager {
 
     private final CacheManager cacheManager;
-    private final ObjectMapper objectMapper;
-
-    public ReactiveCacheManager(final CacheManager cacheManager, final ObjectMapper objectMapper) {
-        this.cacheManager = cacheManager;
-        this.objectMapper = objectMapper;
-    }
 
     public <T> Mono<T> cacheMono(final String cacheName, final Object key, final Supplier<Mono<T>> retriever, final Class<T> classType) {
         return CacheMono
@@ -66,7 +60,4 @@ public class ReactiveCacheManager {
         return Objects.requireNonNull(cacheManager.getCache(name));
     }
 
-    protected <T> T cast(final Object target, final TypeReference<T> typeReference) {
-        return objectMapper.convertValue(target, typeReference);
-    }
 }
