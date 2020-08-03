@@ -19,7 +19,7 @@ public class BindingTestEntity {
     }
 
     @Constraint(fieldName = "name", message = "hotrie is admin")
-    public Validator predicate = () -> "hotire".equals(getName());
+    private Validator predicate = () -> "hotire".equals(getName());
 
     public String getName() {
         return name;

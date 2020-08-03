@@ -1,5 +1,9 @@
 package com.github.hotire.reactor.utils.bind;
 
+import com.github.hotire.reactor.utils.bind.validation.BindingResultException;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -7,6 +11,7 @@ import org.springframework.web.reactive.function.server.ServerRequest;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
+import javax.validation.constraints.NotEmpty;
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.Year;
@@ -69,7 +74,7 @@ class BindingUtilsTest {
   }
 
   @Test
-  void pathVariable() throws InterruptedException {
+  void queryParam() throws InterruptedException {
     // Given
     final ServerRequest request = mock(ServerRequest.class);
     final MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
@@ -86,7 +91,7 @@ class BindingUtilsTest {
   }
 
   @Test
-  void queryParam() throws InterruptedException {
+  void pathVariable() throws InterruptedException {
     // Given
     final ServerRequest request = mock(ServerRequest.class);
     final Map<String, String> map = new HashMap<>();
@@ -102,7 +107,7 @@ class BindingUtilsTest {
   }
 
   @Test
-  void queryParam_boolean() {
+  void pathVariable_boolean() {
     // Given
     final ServerRequest request = mock(ServerRequest.class);
     final Map<String, String> map = new HashMap<>();
@@ -133,43 +138,69 @@ class BindingUtilsTest {
     StepVerifier.create(result).expectNext(true).verifyComplete();
   }
 
+
+  @Test
+  void bind() {
+    // given
+    final String expected = "hello";
+    final ServerRequest request = mock(ServerRequest.class);
+    final Map<String, String> map = new HashMap<>();
+    map.put("name", expected);
+
+    // when
+    when(request.pathVariables()).thenReturn(map);
+    when(request.queryParams()).thenReturn(new LinkedMultiValueMap<>());
+    final Data result = BindingUtils.bind(request, Data.class);
+
+    // then
+    assertThat(result.getName()).isEqualTo(expected);
+  }
+
+  @Test
+  void validateThrow() {
+    // given
+    final Data data = new Data();
+
+    // when then
+    Assertions.assertThrows(BindingResultException.class, () -> BindingUtils.validate(data, true));
+  }
+
+  @Test
+  void bindOneToMonoEmpty() {
+    // given
+    final ServerRequest request = mock(ServerRequest.class);
+
+    // when
+    when(request.pathVariables()).thenReturn(Collections.emptyMap());
+    when(request.queryParams()).thenReturn(new LinkedMultiValueMap<>());
+    final Mono<Boolean> result = BindingUtils.bindOneToMono(request, Boolean.class);
+
+    // then
+    StepVerifier.create(result).verifyComplete();
+  }
+
+  @Test
+  void bindReflectionException() {
+    // given
+    final ServerRequest request = mock(ServerRequest.class);
+
+    // when then
+    Assertions.assertThrows(RuntimeException.class, () -> BindingUtils.bind(request, PrivateConstructorClass.class));
+  }
+
+  @lombok.Data
   public static class Data {
+    @NotEmpty
     private String name;
     private LocalDate date;
     private Year year;
     private Month month;
-
-    public String getName() {
-      return name;
-    }
-
-    public void setName(String name) {
-      this.name = name;
-    }
-
-    public LocalDate getDate() {
-      return date;
-    }
-
-    public void setDate(LocalDate date) {
-      this.date = date;
-    }
-
-    public Year getYear() {
-      return year;
-    }
-
-    public void setYear(Year year) {
-      this.year = year;
-    }
-
-    public Month getMonth() {
-      return month;
-    }
-
-    public void setMonth(Month month) {
-      this.month = month;
-    }
   }
+
+
+  @NoArgsConstructor(access = AccessLevel.PRIVATE)
+  public static class PrivateConstructorClass {
+  }
+
 
 }

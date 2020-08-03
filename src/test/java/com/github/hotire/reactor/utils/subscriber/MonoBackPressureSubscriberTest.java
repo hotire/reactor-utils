@@ -29,6 +29,22 @@ class MonoBackPressureSubscriberTest {
     }
 
     @Test
+    void hookOnNextError() {
+        // given
+        final RuntimeException error = new RuntimeException();
+        final ArgumentCaptor<Throwable> argumentCaptor = ArgumentCaptor.forClass(Throwable.class);
+        final Consumer<Throwable> consumer = mock(Consumer.class);
+        final MonoBackPressureSubscriber<String> subscriber = new MonoBackPressureSubscriber<>(1, 1, s -> {}, consumer, () -> {});
+
+        // when
+        subscriber.hookOnNext(Mono.error(error));
+
+        // then
+        verify(consumer, times(1)).accept(argumentCaptor.capture());
+        assertThat(argumentCaptor.getValue()).isEqualTo(error);
+    }
+
+    @Test
     void hookOnSubscribe() {
         // given
         final MonoBackPressureSubscriber<String> subscriber = MonoBackPressureSubscriber.of(1, 1,  mock(Consumer.class));
