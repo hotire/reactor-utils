@@ -32,6 +32,7 @@ public class ReactiveCacheManager {
         return cacheMono(cacheName, key, Mono::empty, classType);
     }
 
+    @SuppressWarnings("unchecked")
     public <T> Flux<T> cacheFlux(final String cacheName, final Object key, final Supplier<Flux<T>> retriever, final Class<T> classType) {
         return CacheFlux
                 .lookup(k -> Mono.justOrEmpty(getCache(cacheName).get(k, List.class))
