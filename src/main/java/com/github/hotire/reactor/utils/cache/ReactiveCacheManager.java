@@ -28,10 +28,6 @@ public class ReactiveCacheManager {
                                                  .then());
     }
 
-    public <T> Mono<T> cacheMono(final String cacheName, final Object key, final Class<T> classType) {
-        return cacheMono(cacheName, key, Mono::empty, classType);
-    }
-
     @SuppressWarnings("unchecked")
     public <T> Flux<T> cacheFlux(final String cacheName, final Object key, final Supplier<Flux<T>> retriever, final Class<T> classType) {
         return CacheFlux
@@ -47,10 +43,6 @@ public class ReactiveCacheManager {
                                                      .collectList()
                                                      .doOnNext(list -> getCache(cacheName).put(k, list))
                                                      .then());
-    }
-
-    public <T> Flux<T> cacheFlux(final String cacheName, final Object key, final Class<T> classType) {
-        return cacheFlux(cacheName, key, Flux::empty, classType);
     }
 
     public Mono<Void> evict(final String cacheName, final Object key) {

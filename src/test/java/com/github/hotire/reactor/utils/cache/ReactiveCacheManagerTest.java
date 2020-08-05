@@ -20,6 +20,24 @@ class ReactiveCacheManagerTest {
         // given
         final String cacheName = "";
         final String key = "";
+        final CacheManager cacheManager = mock(CacheManager.class);
+        final Cache cache = new ConcurrentMapCache(cacheName);
+        final ReactiveCacheManager manager = new ReactiveCacheManager(cacheManager);
+
+        // when
+        when(cacheManager.getCache(cacheName)).thenReturn(cache);
+        final Mono<Object> result = manager.cacheMono(cacheName, key, Mono::empty, Object.class);
+
+        // then
+        StepVerifier.create(result)
+                    .verifyComplete();
+    }
+
+    @Test
+    void cacheMonoHit() {
+        // given
+        final String cacheName = "";
+        final String key = "";
         final Object data = new Object();
         final CacheManager cacheManager = mock(CacheManager.class);
         final Cache cache = new ConcurrentMapCache(cacheName);
@@ -28,7 +46,7 @@ class ReactiveCacheManagerTest {
 
         // when
         when(cacheManager.getCache(cacheName)).thenReturn(cache);
-        final Mono<Object> result = manager.cacheMono(cacheName, key, Object.class);
+        final Mono<Object> result = manager.cacheMono(cacheName, key, Mono::empty, Object.class);
 
         // then
         StepVerifier.create(result)
@@ -41,6 +59,24 @@ class ReactiveCacheManagerTest {
         // given
         final String cacheName = "";
         final String key = "";
+        final CacheManager cacheManager = mock(CacheManager.class);
+        final Cache cache = new ConcurrentMapCache(cacheName);
+        final ReactiveCacheManager manager = new ReactiveCacheManager(cacheManager);
+
+        // when
+        when(cacheManager.getCache(cacheName)).thenReturn(cache);
+        final Flux<Object> result = manager.cacheFlux(cacheName, key, Flux::empty, Object.class);
+
+        // then
+        StepVerifier.create(result)
+                    .verifyComplete();
+    }
+
+    @Test
+    void cacheFluxHit() {
+        // given
+        final String cacheName = "";
+        final String key = "";
         final List<?> data = Lists.newArrayList(new Object());
         final CacheManager cacheManager = mock(CacheManager.class);
         final Cache cache = new ConcurrentMapCache(cacheName);
@@ -49,7 +85,7 @@ class ReactiveCacheManagerTest {
 
         // when
         when(cacheManager.getCache(cacheName)).thenReturn(cache);
-        final Flux<Object> result = manager.cacheFlux(cacheName, key, Object.class);
+        final Flux<Object> result = manager.cacheFlux(cacheName, key, Flux::empty, Object.class);
 
         // then
         StepVerifier.create(result)
