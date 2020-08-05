@@ -30,20 +30,18 @@ public class ReactiveCacheAspect {
         final MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
         final String key = parseSpel(methodSignature.getParameterNames(), joinPoint.getArgs(), reactiveCacheable.key());
 
-        final Method method = methodSignature.getMethod();
-
         final Supplier<Class<?>> returnClass = () -> {
+            final Method method = methodSignature.getMethod();
             final ParameterizedType parameterizedType = (ParameterizedType) method.getGenericReturnType();
             final Type returnTypeInsideMono = parameterizedType.getActualTypeArguments()[0];
-            return  ResolvableType.forType(returnTypeInsideMono).resolve();
+            return ResolvableType.forType(returnTypeInsideMono).resolve();
         };
 
-
-        if (Mono.class.equals(method.getReturnType())) {
+        if (Mono.class.equals(methodSignature.getReturnType())) {
             return reactiveCacheManager.cacheMono(reactiveCacheable.name(), key, retriever(joinPoint), returnClass.get());
         }
 
-        if (Flux.class.equals(method.getReturnType())) {
+        if (Flux.class.equals(methodSignature.getReturnType())) {
             return reactiveCacheManager.cacheFlux(reactiveCacheable.name(), key, retriever(joinPoint), returnClass.get());
         }
 
