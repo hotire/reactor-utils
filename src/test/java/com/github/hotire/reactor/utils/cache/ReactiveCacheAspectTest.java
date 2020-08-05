@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.function.Supplier;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -23,5 +24,20 @@ class ReactiveCacheAspectTest {
 
         // then
         Assertions.assertThrows(RuntimeException.class, result::get);
+    }
+
+    @Test
+    void parseSpel() {
+        // given
+        final String[] parmas = new String[]{"id"};
+        final Object[] arguments = new Object[]{"a"};
+        final String spel = "#id";
+        final ReactiveCacheAspect aspect = new ReactiveCacheAspect(mock(ReactiveCacheManager.class));
+
+        // when
+        final String result = aspect.parseSpel(parmas, arguments, spel);
+
+        // then
+        assertThat(result).isEqualTo(arguments[0]);
     }
 }
