@@ -11,8 +11,7 @@ import reactor.test.StepVerifier;
 
 import java.util.List;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 class ReactiveCacheManagerTest {
 
@@ -55,6 +54,25 @@ class ReactiveCacheManagerTest {
         // then
         StepVerifier.create(result)
                     .expectNextCount(1L)
+                    .verifyComplete();
+    }
+
+    @Test
+    void evict() {
+        // given
+        final String cacheName = "";
+        final String key = "";
+        final CacheManager cacheManager = mock(CacheManager.class);
+        final Cache cache = mock(Cache.class);
+        final ReactiveCacheManager manager = new ReactiveCacheManager(cacheManager);
+
+        // when
+        when(cacheManager.getCache(cacheName)).thenReturn(cache);
+        final Mono<Void> result = manager.evict(cacheName, key);
+
+        // then
+        StepVerifier.create(result)
+                    .then(() -> verify(cache, times(1)).evict(key))
                     .verifyComplete();
     }
 
