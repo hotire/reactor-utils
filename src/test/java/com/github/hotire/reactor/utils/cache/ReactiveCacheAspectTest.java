@@ -92,6 +92,30 @@ class ReactiveCacheAspectTest {
     }
 
     @Test
+    void evictThrow() throws Throwable {
+        final String reactiveCacheEvictName = "";
+        final String key = "";
+        final ReactiveCacheManager cacheManager = mock(ReactiveCacheManager.class);
+        final ReactiveCacheAspect aspect = new ReactiveCacheAspect(cacheManager) {
+            @Override
+            protected String parseSpel(final String[] params, final Object[] arguments, final String spel) {
+                return key;
+            }
+        };
+        final ProceedingJoinPoint joinPoint = mock(ProceedingJoinPoint.class);
+        final MethodSignature methodSignature = mock(MethodSignature.class);
+        final ReactiveCacheEvict reactiveCacheEvict = mock(ReactiveCacheEvict.class);
+
+        // when
+        when(reactiveCacheEvict.name()).thenReturn(reactiveCacheEvictName);
+        when(joinPoint.proceed()).thenReturn(mock(Object.class));
+        when(joinPoint.getSignature()).thenReturn(methodSignature);
+
+        // then
+        Assertions.assertThrows(UnsupportedOperationException.class, () -> aspect.evict(joinPoint, reactiveCacheEvict));
+    }
+
+    @Test
     void retriever() throws Throwable {
         // given
         final ProceedingJoinPoint joinPoint = mock(ProceedingJoinPoint.class);
