@@ -19,7 +19,6 @@ import static org.mockito.Mockito.*;
 
 class ReactiveCacheAspectTest {
 
-
     private static Stream<Arguments> provideCache() {
         return Stream.of(
                 Arguments.of(Mono.class, 1, 0),
@@ -54,6 +53,42 @@ class ReactiveCacheAspectTest {
         // then
         verify(cacheManager, times(monoCacheCount)).cacheMono(eq(reactiveCacheable.name()), any(), any(), any());
         verify(cacheManager, times(fluxCacheCount)).cacheFlux(eq(reactiveCacheable.name()), any(), any(), any());
+    }
+
+    private static Stream<Arguments> provideEvict() {
+        return Stream.of(
+                Arguments.of(Mono.class),
+                Arguments.of(Flux.class)
+        );
+    }
+
+    @MethodSource("provideEvict")
+    @ParameterizedTest
+    void evict(final Class<?> returnType) throws Throwable {
+        // given
+        final String reactiveCacheEvictName = "";
+        final String key = "";
+        final ReactiveCacheManager cacheManager = mock(ReactiveCacheManager.class);
+        final ReactiveCacheAspect aspect = new ReactiveCacheAspect(cacheManager) {
+            @Override
+            protected String parseSpel(final String[] params, final Object[] arguments, final String spel) {
+                return key;
+            }
+        };
+        final ProceedingJoinPoint joinPoint = mock(ProceedingJoinPoint.class);
+        final MethodSignature methodSignature = mock(MethodSignature.class);
+        final ReactiveCacheEvict reactiveCacheEvict = mock(ReactiveCacheEvict.class);
+
+        // when
+        when(methodSignature.getReturnType()).thenReturn(returnType);
+        when(reactiveCacheEvict.name()).thenReturn(reactiveCacheEvictName);
+        when(cacheManager.evict(reactiveCacheEvict.name(), key)).thenReturn(Mono.empty());
+        when(joinPoint.proceed()).thenReturn(mock(returnType));
+        when(joinPoint.getSignature()).thenReturn(methodSignature);
+        final Object result = aspect.evict(joinPoint, reactiveCacheEvict);
+
+        // then
+        assertThat(result).isInstanceOf(returnType);
     }
 
     @Test

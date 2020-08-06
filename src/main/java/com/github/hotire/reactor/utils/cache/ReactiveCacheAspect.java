@@ -53,20 +53,18 @@ public class ReactiveCacheAspect {
     public Object evict(final ProceedingJoinPoint joinPoint, final ReactiveCacheEvict reactiveCacheEvict) {
         final MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
         final String key = parseSpel(methodSignature.getParameterNames(), joinPoint.getArgs(), reactiveCacheEvict.key());
-        final Method method = methodSignature.getMethod();
 
-        if (Mono.class.equals(method.getReturnType())) {
+        if (Mono.class.equals(methodSignature.getReturnType())) {
             return reactiveCacheManager.evict(reactiveCacheEvict.name(), key)
                                        .then((Mono<?>)retriever(joinPoint).get());
         }
 
-        if (Flux.class.equals(method.getReturnType())) {
+        if (Flux.class.equals(methodSignature.getReturnType())) {
             return reactiveCacheManager.evict(reactiveCacheEvict.name(), key)
                                        .thenMany((Flux<?>)retriever(joinPoint).get());
         }
 
-        return reactiveCacheManager.evict(reactiveCacheEvict.name(), key)
-                                   .then((Mono.just(retriever(joinPoint).get())));
+        throw new UnsupportedOperationException("Cannot support return type : " + methodSignature.getReturnType());
     }
 
     protected String parseSpel(final String[] params, final Object[] arguments, final String spel) {
