@@ -16,7 +16,7 @@
 <dependency>
     <groupId>com.github.hotire</groupId>
     <artifactId>reactor-utils</artifactId>
-    <version>0.0.7.1</version>
+    <version>0.0.8.0</version>
 </dependency>
 ```
 
